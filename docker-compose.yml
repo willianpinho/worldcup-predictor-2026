@@ -15,7 +15,7 @@ services:
     volumes:
       - bolao_db:/app/data
     networks:
-      - web
+      - traefik-network
     labels:
       - traefik.enable=true
       - traefik.http.routers.bolao.rule=Host(`bolao.willianpinho.com`)
@@ -24,7 +24,7 @@ services:
       # tls=true ONLY — no certresolver (per rules/vps-infra.md).
       - traefik.http.routers.bolao.tls=true
       - traefik.http.services.bolao.loadbalancer.server.port=3000
-      - traefik.docker.network=web
+      - traefik.docker.network=traefik-network
 
   # Polls the results-sync endpoint every 30 min so scores update automatically.
   cron:
@@ -35,7 +35,7 @@ services:
     environment:
       CRON_SECRET: "${CRON_SECRET:?set CRON_SECRET}"
     networks:
-      - web
+      - traefik-network
     entrypoint:
       - sh
       - -c
@@ -45,6 +45,6 @@ volumes:
   bolao_db:
 
 networks:
-  # External Traefik network. Rename to match your VPS (e.g. `traefik`, `proxy`).
-  web:
+  # External Traefik network on the VPS (test-ash).
+  traefik-network:
     external: true
