@@ -1,15 +1,21 @@
 import { ModelCard } from "@/components/ModelCard";
-import { getLeaderboard } from "@/lib/queries";
+import { pointsBadgeClass } from "@/lib/format";
+import { getLeaderboard, MODELS } from "@/lib/queries";
+
+const SCORING = [
+  { p: 5, label: "Exact score" },
+  { p: 3, label: "Correct result + one exact side" },
+  { p: 2, label: "Correct result only (W/D/L)" },
+  { p: 0, label: "Wrong result" },
+];
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const lb = await getLeaderboard();
-  const { claude, gemini } = lb.summary;
 
-  const bothScored = claude.played > 0 || gemini.played > 0;
-  const claudeLeads = bothScored && claude.points > gemini.points;
-  const geminiLeads = bothScored && gemini.points > claude.points;
+  const anyScored = lb.playedMatches > 0 && MODELS.some((m) => lb.summary[m].played > 0);
+  const maxPoints = Math.max(...MODELS.map((m) => lb.summary[m].points));
 
   const pct = lb.totalMatches
     ? Math.round((lb.playedMatches / lb.totalMatches) * 100)
@@ -22,9 +28,9 @@ export default async function DashboardPage() {
           Which AI predicts the 2026 World Cup better?
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-muted">
-          Claude and Gemini predict all 72 group-stage matches. As the real results
-          come in, every correct call scores points. The Brier score measures how well
-          each model&apos;s probabilities are calibrated — lower is better.
+          Claude, Gemini and OpenAI each predict all 72 group-stage matches. As the real
+          results come in, every correct call scores points. The Brier score measures how
+          well each model&apos;s probabilities are calibrated — lower is better.
         </p>
       </section>
 
@@ -40,28 +46,31 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2">
-        <ModelCard
-          model="claude"
-          summary={claude}
-          predicted={lb.predictedMatches.claude}
-          leading={claudeLeads}
-        />
-        <ModelCard
-          model="gemini"
-          summary={gemini}
-          predicted={lb.predictedMatches.gemini}
-          leading={geminiLeads}
-        />
+      <section className="grid gap-4 sm:grid-cols-3">
+        {MODELS.map((model) => (
+          <ModelCard
+            key={model}
+            model={model}
+            summary={lb.summary[model]}
+            predicted={lb.predictedMatches[model]}
+            leading={anyScored && maxPoints > 0 && lb.summary[model].points === maxPoints}
+          />
+        ))}
       </section>
 
       <section className="rounded-xl border border-border bg-surface p-4 text-sm text-muted">
-        <h3 className="mb-2 font-semibold text-foreground">How scoring works</h3>
-        <ul className="grid gap-1 sm:grid-cols-2">
-          <li>🎯 Exact score — 5 pts</li>
-          <li>✅ Correct result + one exact side — 3 pts</li>
-          <li>➖ Correct result only (W/D/L) — 2 pts</li>
-          <li>❌ Wrong result — 0 pts</li>
+        <h3 className="mb-3 font-semibold text-foreground">How scoring works</h3>
+        <ul className="grid gap-2 sm:grid-cols-2">
+          {SCORING.map(({ p, label }) => (
+            <li key={label} className="flex items-center gap-2">
+              <span
+                className={`inline-flex h-6 w-9 items-center justify-center rounded font-mono text-xs ${pointsBadgeClass(p)}`}
+              >
+                +{p}
+              </span>
+              {label}
+            </li>
+          ))}
         </ul>
       </section>
     </div>

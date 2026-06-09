@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FaFutbol } from "react-icons/fa6";
 
 const links = [
   { href: "/", label: "Leaderboard" },
@@ -12,7 +13,7 @@ export function Nav() {
     <header className="border-b border-border bg-surface/60 backdrop-blur">
       <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4">
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <span className="text-lg">⚽</span>
+          <FaFutbol className="text-accent" aria-hidden />
           <span>
             WC Predictor <span className="text-accent">2026</span>
           </span>

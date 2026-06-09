@@ -1,8 +1,8 @@
 # Prediction prompt (JSON output for import)
 
-Paste the prompt below into **Claude** and into **Gemini / Antigravity** (ideally with
-web access enabled). Set `"model"` to `"claude"` or `"gemini"` for each AI. The response
-is **JSON only** — paste the whole thing into `/admin` → "Import".
+Paste the prompt below into **Claude**, **Gemini / Antigravity** and **OpenAI** (ideally
+with web access enabled). Set `"model"` to `"claude"`, `"gemini"` or `"openai"` for each
+AI. The response is **JSON only** — paste the whole thing into `/admin` → "Import".
 
 The JSON must match this shape (validated by Zod on import):
 

@@ -16,7 +16,7 @@ const PredictionItem = z.object({
 });
 
 export const ImportSchema = z.object({
-  model: z.enum(["claude", "gemini"]),
+  model: z.enum(["claude", "gemini", "openai"]),
   predictions: z.array(PredictionItem).min(1),
 });
 

@@ -1,10 +1,16 @@
-# World Cup Predictor 2026 — Claude vs Gemini
+# World Cup Predictor 2026 — Claude vs Gemini vs OpenAI
 
-A proof of concept that pits **Claude** against **Gemini** on the 2026 FIFA World Cup
-group stage (72 matches, June 11–27). Each AI generates predictions from the prompt in
-[`docs/PROMPT.md`](docs/PROMPT.md); the app stores both, fetches the real results
-automatically, and scores which model predicts better — with a Brier score to measure
-calibration, not just raw hit rate.
+A proof of concept that pits **Claude**, **Gemini** and **OpenAI** against each other on
+the 2026 FIFA World Cup group stage (72 matches, June 11–27). Each AI generates
+predictions from a single shared prompt; the app stores all three, fetches the real
+results automatically, and scores which model predicts better — with a Brier score to
+measure calibration, not just raw hit rate.
+
+**Live:** https://worldcup2026.willianpinho.com · **Methodology:** [the exact prompt](https://worldcup2026.willianpinho.com/prompt)
+
+![Leaderboard — Claude vs Gemini vs OpenAI](docs/screenshot.png)
+
+![Group-stage matches with flags and per-model predictions](docs/screenshot-matches.png)
 
 ## Stack
 
@@ -13,9 +19,20 @@ Tailwind 4 · TypeScript. No native compiler required (libSQL ships a prebuilt b
 
 ## Screens
 
-- `/` — leaderboard, Claude vs Gemini (points, accuracy, exact scores, Brier).
-- `/matches` — all 72 fixtures with each AI's prediction, the real result, and points.
+- `/` — leaderboard for the three models (points, accuracy, exact scores, Brier).
+- `/matches` — all 72 fixtures with team flags and each AI's prediction, result, and points.
+- `/prompt` — the full, exact prompt fed to every model (transparency / methodology).
 - `/admin` — import predictions (JSON), sync results, and manual override.
+
+## Methodology
+
+Every model receives the **same** prompt, shown verbatim in-app at
+[`/prompt`](https://worldcup2026.willianpinho.com/prompt) and in
+[`docs/PROMPT.md`](docs/PROMPT.md). It asks each AI to reason from squad strength, recent
+form, availability, tactics, head-to-head, venue context (altitude, heat, travel), host
+advantage and market odds, then commit to a scoreline and calibrated win/draw/loss
+probabilities. The leaderboard's Brier score rewards honest probabilities, not just
+correct calls.
 
 ## Data
 
@@ -37,7 +54,8 @@ Scoring: exact score 5 · correct result + one exact side 3 · result only 2 · 
 
 ## Import predictions
 
-1. Run the prompt in `docs/PROMPT.md` in Claude and in Gemini (with web access).
+1. Run the prompt from [`/prompt`](https://worldcup2026.willianpinho.com/prompt) in
+   Claude, Gemini and OpenAI (with web access). For each, set `"model"` accordingly.
 2. In `/admin`, enter the `ADMIN_TOKEN` and paste each AI's JSON → "Import".
    Names in any language or order are normalized; unmatched ones are reported back.
 
