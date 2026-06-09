@@ -2,10 +2,10 @@ import { flagCode } from "@/lib/flags";
 import { formatKickoff, pointsBadgeClass } from "@/lib/format";
 import { MODELS, type MatchView, type ModelId, type PredView } from "@/lib/queries";
 
-const PRED_META: Record<ModelId, { color: string; label: string }> = {
-  claude: { color: "text-claude", label: "C" },
-  gemini: { color: "text-gemini", label: "G" },
-  openai: { color: "text-openai", label: "O" },
+const PRED_META: Record<ModelId, { name: string; color: string; label: string }> = {
+  claude: { name: "Claude", color: "text-claude", label: "C" },
+  gemini: { name: "Gemini", color: "text-gemini", label: "G" },
+  openai: { name: "OpenAI", color: "text-openai", label: "O" },
 };
 
 function Flag({ team }: { team: string }) {
@@ -56,31 +56,65 @@ function PredCell({ model, pred }: { model: ModelId; pred: PredView | null }) {
 
 function MatchCard({ m }: { m: MatchView }) {
   const finished = m.status === "FINISHED" && m.scoreA !== null && m.scoreB !== null;
+  const reasonings = MODELS.map((model) => ({ model, pred: m.predictions[model] })).filter(
+    (x): x is { model: ModelId; pred: PredView } => Boolean(x.pred?.reasoning),
+  );
+
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="min-w-0 flex-1">
-        <div className="text-xs text-muted">
-          {formatKickoff(m.kickoff)} · round {m.round}
-          {m.city ? ` · ${m.city}` : ""}
+    <div className="rounded-xl border border-border bg-surface p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <div className="text-xs text-muted">
+            {formatKickoff(m.kickoff)} · round {m.round}
+            {m.city ? ` · ${m.city}` : ""}
+          </div>
+          <div className="mt-1 grid grid-cols-[1fr_auto_1fr] items-center gap-2 font-medium">
+            <Team name={m.teamA} align="left" />
+            <span className="shrink-0 rounded bg-surface-2 px-2 py-0.5 font-mono text-sm">
+              {finished ? `${m.scoreA} – ${m.scoreB}` : "vs"}
+            </span>
+            <Team name={m.teamB} align="right" />
+          </div>
+          {m.status === "LIVE" && (
+            <span className="mt-1 inline-block rounded-full bg-rose-500/20 px-2 py-0.5 text-xs text-rose-300">
+              live
+            </span>
+          )}
         </div>
-        <div className="mt-1 grid grid-cols-[1fr_auto_1fr] items-center gap-2 font-medium">
-          <Team name={m.teamA} align="left" />
-          <span className="shrink-0 rounded bg-surface-2 px-2 py-0.5 font-mono text-sm">
-            {finished ? `${m.scoreA} – ${m.scoreB}` : "vs"}
-          </span>
-          <Team name={m.teamB} align="right" />
+        <div className="flex shrink-0 gap-5 sm:flex-col sm:gap-1">
+          {MODELS.map((model) => (
+            <PredCell key={model} model={model} pred={m.predictions[model]} />
+          ))}
         </div>
-        {m.status === "LIVE" && (
-          <span className="mt-1 inline-block rounded-full bg-rose-500/20 px-2 py-0.5 text-xs text-rose-300">
-            live
-          </span>
-        )}
       </div>
-      <div className="flex shrink-0 gap-5 sm:flex-col sm:gap-1">
-        {MODELS.map((model) => (
-          <PredCell key={model} model={model} pred={m.predictions[model]} />
-        ))}
-      </div>
+
+      {reasonings.length > 0 && (
+        <details className="group mt-3 border-t border-border/60 pt-2">
+          <summary className="flex cursor-pointer select-none items-center gap-1.5 text-xs text-muted hover:text-foreground">
+            <span className="transition-transform group-open:rotate-90">▸</span>
+            Reasoning
+          </summary>
+          <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted">
+            {reasonings.map(({ model, pred }) => (
+              <li key={model} className="flex gap-2">
+                <span className={`shrink-0 font-bold ${PRED_META[model].color}`}>
+                  {PRED_META[model].label}
+                </span>
+                <span>
+                  <span className="font-mono text-foreground">
+                    {pred.predA}–{pred.predB}
+                  </span>
+                  {pred.confidence ? (
+                    <span className="ml-1 text-muted">({pred.confidence})</span>
+                  ) : null}
+                  {" — "}
+                  {pred.reasoning}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
     </div>
   );
 }
