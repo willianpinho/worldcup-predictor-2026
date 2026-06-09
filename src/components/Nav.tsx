@@ -13,7 +13,7 @@ export function Nav() {
         <Link href="/" className="flex items-center gap-2 font-semibold">
           <span className="text-lg">⚽</span>
           <span>
-            WC 2026 <span className="text-accent">Pool</span>
+            WC Predictor <span className="text-accent">2026</span>
           </span>
         </Link>
         <ul className="flex items-center gap-1 text-sm">

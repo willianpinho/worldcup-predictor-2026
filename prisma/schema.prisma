@@ -1,4 +1,4 @@
-// Bolão Copa 2026 — Claude × Gemini PoC
+// World Cup Predictor 2026 — Claude vs Gemini PoC
 // Prisma 7 with the new `prisma-client` generator + libSQL driver adapter (SQLite file).
 // SQLite has no native enums, so `status` and `model` are plain strings guarded in app code.
 
@@ -48,7 +48,7 @@ model Prediction {
   probWinA   Float? // 0..100
   probDraw   Float? // 0..100
   probWinB   Float? // 0..100
-  confidence String? // 'alta' | 'media' | 'baixa'
+  confidence String? // 'high' | 'medium' | 'low'
   reasoning  String?
 
   createdAt DateTime @default(now())

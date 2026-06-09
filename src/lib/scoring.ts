@@ -1,4 +1,4 @@
-// Pure scoring logic for the bolão. No I/O — fully unit-testable.
+// Pure scoring logic for the prediction pool. No I/O — fully unit-testable.
 
 export type Outcome = "A" | "D" | "B";
 
@@ -23,7 +23,7 @@ export function outcome(a: number, b: number): Outcome {
 }
 
 /**
- * Bolão points for one prediction vs the real result:
+ * Pool points for one prediction vs the real result:
  *  - 5: exact score
  *  - 3: correct outcome + exactly one side's goals correct
  *  - 2: correct outcome only

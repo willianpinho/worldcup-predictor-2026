@@ -7,7 +7,7 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "World Cup 2026 Prediction Pool — Claude vs Gemini",
+  title: "World Cup Predictor 2026 — Claude vs Gemini",
   description:
     "A proof of concept: which AI predicts the 2026 World Cup group stage better?",
 };

@@ -1,4 +1,4 @@
-# World Cup 2026 Prediction Pool — Claude vs Gemini
+# World Cup Predictor 2026 — Claude vs Gemini
 
 A proof of concept that pits **Claude** against **Gemini** on the 2026 FIFA World Cup
 group stage (72 matches, June 11–27). Each AI generates predictions from the prompt in
@@ -43,13 +43,13 @@ Scoring: exact score 5 · correct result + one exact side 3 · result only 2 · 
 
 ## Deploy (VPS + Traefik + Cloudflare)
 
-Subdomain `bolao.willianpinho.com`, TLS via origin cert (no certresolver). Secrets via
-1Password:
+Subdomain `worldcup2026.willianpinho.com`, TLS via origin cert (no certresolver).
+Secrets via 1Password:
 
 ```bash
 op run --env-file=.env.template -- docker compose up -d --build
 ```
 
-SQLite persists in the `bolao_db` volume (`/app/data`). A cron sidecar calls
+SQLite persists in the `wc_db` volume (`/app/data`). A cron sidecar calls
 `/api/results/sync` every 30 minutes. Adjust the external Traefik network name in
 `docker-compose.yml` (`traefik-network`) to match your host.

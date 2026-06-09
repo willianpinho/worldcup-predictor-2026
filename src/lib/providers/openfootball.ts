@@ -40,7 +40,7 @@ function extractScore(m: OpenfootballMatch): { a: number | null; b: number | nul
 
 export async function fetchOpenfootballFixtures(): Promise<FixtureInput[]> {
   const res = await fetch(SOURCE_URL, {
-    headers: { "user-agent": "bolao-copa-2026" },
+    headers: { "user-agent": "worldcup-predictor-2026" },
   });
   if (!res.ok) throw new Error(`openfootball HTTP ${res.status}`);
 
