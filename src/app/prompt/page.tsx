@@ -19,11 +19,13 @@ export default function PromptPage() {
       <div>
         <h1 className="text-2xl font-bold">The prompt</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted">
-          The exact instruction given to both Claude and Gemini. Each model returns
+          The exact instruction given to Claude, Gemini and OpenAI. Each model returns
           JSON only, which is pasted into <span className="font-mono">/admin</span> to
-          score the pool. For Gemini, change{" "}
-          <span className="font-mono">&quot;model&quot;: &quot;claude&quot;</span> to{" "}
-          <span className="font-mono">&quot;model&quot;: &quot;gemini&quot;</span>.
+          score the pool. Set{" "}
+          <span className="font-mono">&quot;model&quot;</span> to{" "}
+          <span className="font-mono">&quot;claude&quot;</span>,{" "}
+          <span className="font-mono">&quot;gemini&quot;</span> or{" "}
+          <span className="font-mono">&quot;openai&quot;</span> per AI.
         </p>
       </div>
 
