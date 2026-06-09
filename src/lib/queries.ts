@@ -7,11 +7,15 @@ import {
   type ScoredPrediction,
 } from "./scoring";
 
-export const MODELS = ["claude", "gemini"] as const;
+export const MODELS = ["claude", "gemini", "openai"] as const;
 export type ModelId = (typeof MODELS)[number];
 
 function isModel(value: string): value is ModelId {
   return (MODELS as readonly string[]).includes(value);
+}
+
+function emptyByModel<T>(make: () => T): Record<ModelId, T> {
+  return { claude: make(), gemini: make(), openai: make() };
 }
 
 function resultOf(m: {
@@ -58,7 +62,7 @@ export async function getMatches(): Promise<MatchView[]> {
 
   return rows.map((m) => {
     const result = resultOf(m);
-    const predictions: Record<ModelId, PredView | null> = { claude: null, gemini: null };
+    const predictions = emptyByModel<PredView | null>(() => null);
     for (const p of m.predictions) {
       if (!isModel(p.model)) continue;
       predictions[p.model] = {
@@ -99,8 +103,8 @@ export interface Leaderboard {
 export async function getLeaderboard(): Promise<Leaderboard> {
   const rows = await prisma.match.findMany({ include: { predictions: true } });
 
-  const perModel: Record<ModelId, ScoredPrediction[]> = { claude: [], gemini: [] };
-  const predicted: Record<ModelId, number> = { claude: 0, gemini: 0 };
+  const perModel = emptyByModel<ScoredPrediction[]>(() => []);
+  const predicted = emptyByModel<number>(() => 0);
   let played = 0;
 
   for (const m of rows) {
@@ -120,10 +124,13 @@ export async function getLeaderboard(): Promise<Leaderboard> {
     }
   }
 
+  const summary = emptyByModel<ModelSummary>(() => summarize([]));
+  for (const model of MODELS) summary[model] = summarize(perModel[model]);
+
   return {
     totalMatches: rows.length,
     playedMatches: played,
     predictedMatches: predicted,
-    summary: { claude: summarize(perModel.claude), gemini: summarize(perModel.gemini) },
+    summary,
   };
 }

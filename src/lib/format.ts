@@ -3,12 +3,13 @@ const KICKOFF_FMT = new Intl.DateTimeFormat("en-US", {
   month: "short",
   hour: "2-digit",
   minute: "2-digit",
-  timeZone: "America/Sao_Paulo",
+  hour12: false,
+  timeZone: "UTC",
 });
 
-/** Kickoff shown in Brazil time (BRT), the project author's reference. */
+/** Kickoff shown in UTC (neutral across the three host countries). */
 export function formatKickoff(date: Date): string {
-  return KICKOFF_FMT.format(date);
+  return `${KICKOFF_FMT.format(date)} UTC`;
 }
 
 const RUN_FMT = new Intl.DateTimeFormat("en-US", {
