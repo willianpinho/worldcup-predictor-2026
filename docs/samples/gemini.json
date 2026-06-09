@@ -10,8 +10,8 @@
       "probWinA": 45,
       "probDraw": 30,
       "probWinB": 25,
-      "confidence": "baixa",
-      "reasoning": "Estreia costuma ser truncada; África do Sul defende bem."
+      "confidence": "low",
+      "reasoning": "Opening matches are often cagey; South Africa defends well."
     },
     {
       "group": "A",
@@ -22,8 +22,8 @@
       "probWinA": 48,
       "probDraw": 27,
       "probWinB": 25,
-      "confidence": "media",
-      "reasoning": "Coreia com mais ritmo ofensivo."
+      "confidence": "medium",
+      "reasoning": "South Korea carries more attacking rhythm."
     },
     {
       "group": "B",
@@ -34,8 +34,8 @@
       "probWinA": 20,
       "probDraw": 25,
       "probWinB": 55,
-      "confidence": "media",
-      "reasoning": "Suíça mais consistente em fase final."
+      "confidence": "medium",
+      "reasoning": "Switzerland more consistent in tournament play."
     }
   ]
 }

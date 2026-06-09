@@ -1,56 +1,55 @@
-# Bolão Copa 2026 — Claude × Gemini
+# World Cup 2026 Prediction Pool — Claude vs Gemini
 
-Prova de conceito que compara a capacidade preditiva de **Claude** e **Gemini** na
-fase de grupos da Copa do Mundo 2026 (72 jogos, 11–27/jun). Cada IA gera palpites a
-partir do prompt em [`docs/PROMPT.md`](docs/PROMPT.md); o app guarda os dois, busca os
-resultados reais automaticamente e pontua quem acerta mais — com Brier score para medir
-calibração, não só acerto bruto.
+A proof of concept that pits **Claude** against **Gemini** on the 2026 FIFA World Cup
+group stage (72 matches, June 11–27). Each AI generates predictions from the prompt in
+[`docs/PROMPT.md`](docs/PROMPT.md); the app stores both, fetches the real results
+automatically, and scores which model predicts better — with a Brier score to measure
+calibration, not just raw hit rate.
 
 ## Stack
 
-Next.js 16 (App Router) · React 19 · Prisma 7 + SQLite (driver adapter libSQL) ·
-Tailwind 4 · TypeScript. Sem dependência de compilador nativo (libSQL traz binário
-pré-compilado).
+Next.js 16 (App Router) · React 19 · Prisma 7 + SQLite (libSQL driver adapter) ·
+Tailwind 4 · TypeScript. No native compiler required (libSQL ships a prebuilt binary).
 
-## Telas
+## Screens
 
-- `/` — placar geral Claude × Gemini (pontos, aproveitamento, exatos, Brier).
-- `/matches` — os 72 jogos com o palpite de cada IA, resultado real e pontos.
-- `/admin` — importar palpites (JSON), sincronizar resultados e override manual.
+- `/` — leaderboard, Claude vs Gemini (points, accuracy, exact scores, Brier).
+- `/matches` — all 72 fixtures with each AI's prediction, the real result, and points.
+- `/admin` — import predictions (JSON), sync results, and manual override.
 
-## Dados
+## Data
 
-- **Fixtures (seed):** [openfootball/worldcup.json](https://github.com/openfootball/worldcup.json) — público, sem chave.
-- **Resultados (sync):** API-Football se `FOOTBALL_API_KEY` estiver setada; senão openfootball.
-  Override manual no `/admin` cobre qualquer lacuna.
+- **Fixtures (seed):** [openfootball/worldcup.json](https://github.com/openfootball/worldcup.json) — public, no API key.
+- **Results (sync):** API-Football when `FOOTBALL_API_KEY` is set; otherwise openfootball.
+  Manual override in `/admin` covers any gap.
 
-## Rodar local
+## Run locally
 
 ```bash
 pnpm install
-cp .env.example .env          # ajuste ADMIN_TOKEN / CRON_SECRET
-pnpm prisma migrate deploy    # cria o banco
-pnpm db:seed                  # carrega os 72 jogos
+cp .env.example .env          # set ADMIN_TOKEN / CRON_SECRET
+pnpm prisma migrate deploy    # create the database
+pnpm db:seed                  # load the 72 fixtures
 pnpm dev                      # http://localhost:3000
 ```
 
-Pontuação: placar exato 5 · resultado + 1 placar parcial 3 · só o resultado 2 · erro 0.
+Scoring: exact score 5 · correct result + one exact side 3 · result only 2 · wrong 0.
 
-## Importar palpites
+## Import predictions
 
-1. Rode o prompt de `docs/PROMPT.md` no Claude e no Gemini (com web).
-2. Em `/admin`, informe o `ADMIN_TOKEN` e cole o JSON de cada IA → "Importar".
-   Nomes em PT ou EN, em qualquer ordem, são normalizados; não-casados são reportados.
+1. Run the prompt in `docs/PROMPT.md` in Claude and in Gemini (with web access).
+2. In `/admin`, enter the `ADMIN_TOKEN` and paste each AI's JSON → "Import".
+   Names in any language or order are normalized; unmatched ones are reported back.
 
 ## Deploy (VPS + Traefik + Cloudflare)
 
-Subdomínio `bolao.willianpinho.com`, TLS via origin cert (sem certresolver).
-Secrets via 1Password:
+Subdomain `bolao.willianpinho.com`, TLS via origin cert (no certresolver). Secrets via
+1Password:
 
 ```bash
 op run --env-file=.env.template -- docker compose up -d --build
 ```
 
-O SQLite persiste no volume `bolao_db` (`/app/data`). Um sidecar de cron chama
-`/api/results/sync` a cada 30 min. Ajuste o nome da rede externa do Traefik em
-`docker-compose.yml` (`web`) para a da sua VPS.
+SQLite persists in the `bolao_db` volume (`/app/data`). A cron sidecar calls
+`/api/results/sync` every 30 minutes. Adjust the external Traefik network name in
+`docker-compose.yml` (`traefik-network`) to match your host.

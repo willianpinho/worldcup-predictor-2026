@@ -19,20 +19,20 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       <section>
         <h1 className="text-2xl font-bold sm:text-3xl">
-          Qual IA prevê melhor a Copa 2026?
+          Which AI predicts the 2026 World Cup better?
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-muted">
-          Claude e Gemini palpitam os 72 jogos da fase de grupos. Conforme os
-          resultados reais chegam, cada acerto vira ponto. O Brier score mede a
-          calibração das probabilidades — menor é melhor.
+          Claude and Gemini predict all 72 group-stage matches. As the real results
+          come in, every correct call scores points. The Brier score measures how well
+          each model&apos;s probabilities are calibrated — lower is better.
         </p>
       </section>
 
       <section>
         <div className="mb-2 flex items-center justify-between text-sm">
-          <span className="text-muted">Progresso da fase de grupos</span>
+          <span className="text-muted">Group stage progress</span>
           <span className="font-mono">
-            {lb.playedMatches}/{lb.totalMatches} jogos
+            {lb.playedMatches}/{lb.totalMatches} matches
           </span>
         </div>
         <div className="h-2 w-full overflow-hidden rounded-full bg-surface-2">
@@ -56,12 +56,12 @@ export default async function DashboardPage() {
       </section>
 
       <section className="rounded-xl border border-border bg-surface p-4 text-sm text-muted">
-        <h3 className="mb-2 font-semibold text-foreground">Como pontua</h3>
+        <h3 className="mb-2 font-semibold text-foreground">How scoring works</h3>
         <ul className="grid gap-1 sm:grid-cols-2">
-          <li>🎯 Placar exato — 5 pts</li>
-          <li>✅ Resultado certo + 1 placar parcial — 3 pts</li>
-          <li>➖ Só o resultado (V/E/D) — 2 pts</li>
-          <li>❌ Errou o resultado — 0 pts</li>
+          <li>🎯 Exact score — 5 pts</li>
+          <li>✅ Correct result + one exact side — 3 pts</li>
+          <li>➖ Correct result only (W/D/L) — 2 pts</li>
+          <li>❌ Wrong result — 0 pts</li>
         </ul>
       </section>
     </div>

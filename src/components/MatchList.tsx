@@ -21,7 +21,7 @@ function PredCell({ model, pred }: { model: ModelId; pred: PredView | null }) {
           )}
         </>
       ) : (
-        <span className="text-xs text-muted">sem palpite</span>
+        <span className="text-xs text-muted">no prediction</span>
       )}
     </div>
   );
@@ -33,7 +33,7 @@ function MatchCard({ m }: { m: MatchView }) {
     <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0 flex-1">
         <div className="text-xs text-muted">
-          {formatKickoff(m.kickoff)} · rodada {m.round}
+          {formatKickoff(m.kickoff)} · round {m.round}
           {m.city ? ` · ${m.city}` : ""}
         </div>
         <div className="mt-1 flex items-center gap-2 font-medium">
@@ -44,7 +44,7 @@ function MatchCard({ m }: { m: MatchView }) {
           <span className="truncate">{m.teamB}</span>
           {m.status === "LIVE" && (
             <span className="shrink-0 rounded-full bg-rose-500/20 px-2 py-0.5 text-xs text-rose-300">
-              ao vivo
+              live
             </span>
           )}
         </div>
@@ -64,7 +64,7 @@ export function MatchList({ matches }: { matches: MatchView[] }) {
       {groups.map((g) => (
         <section key={g}>
           <h2 className="mb-3 text-lg font-semibold">
-            Grupo <span className="text-accent">{g}</span>
+            Group <span className="text-accent">{g}</span>
           </h2>
           <div className="space-y-2">
             {matches

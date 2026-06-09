@@ -11,7 +11,7 @@ export default async function AdminPage() {
 
   const matches = rows.map((r) => ({
     id: r.id,
-    label: `Grupo ${r.groupName} · ${r.teamA} x ${r.teamB}`,
+    label: `Group ${r.groupName} · ${r.teamA} x ${r.teamB}`,
   }));
 
   return <AdminPanel matches={matches} />;

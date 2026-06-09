@@ -15,7 +15,7 @@ const SAMPLE = `{
     { "group": "A", "teamA": "Mexico", "teamB": "South Africa",
       "scoreA": 2, "scoreB": 0,
       "probWinA": 60, "probDraw": 25, "probWinB": 15,
-      "confidence": "media", "reasoning": "mando + altitude" }
+      "confidence": "medium", "reasoning": "home + altitude" }
   ]
 }`;
 
@@ -49,7 +49,7 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
       });
       const data = (await res.json()) as Json;
       if (!res.ok) {
-        setMsg({ ok: false, text: `Erro ${res.status}: ${JSON.stringify(data)}` });
+        setMsg({ ok: false, text: `Error ${res.status}: ${JSON.stringify(data)}` });
       } else {
         setMsg({ ok: true, text: JSON.stringify(data) });
       }
@@ -65,7 +65,7 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
     try {
       parsed = JSON.parse(json) as Json;
     } catch {
-      setMsg({ ok: false, text: "JSON inválido — cole a saída exata da IA." });
+      setMsg({ ok: false, text: "Invalid JSON — paste the exact AI output." });
       return;
     }
     void post("/api/predictions/import", parsed, "import");
@@ -81,11 +81,11 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
       <div>
         <h1 className="text-2xl font-bold">Admin</h1>
         <p className="mt-1 text-sm text-muted">
-          Importe os palpites das IAs, sincronize resultados e ajuste placares manualmente.
+          Import each AI&apos;s predictions, sync results, and override scores manually.
         </p>
       </div>
 
-      <Card title="Token de admin">
+      <Card title="Admin token">
         <input
           type="password"
           value={token}
@@ -94,11 +94,11 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
           className={field}
         />
         <p className="mt-2 text-xs text-muted">
-          Enviado no header <code>x-admin-token</code>. Definido por env no servidor.
+          Sent in the <code>x-admin-token</code> header. Set via env on the server.
         </p>
       </Card>
 
-      <Card title="1 · Importar palpites (JSON)">
+      <Card title="1 · Import predictions (JSON)">
         <textarea
           value={json}
           onChange={(e) => setJson(e.target.value)}
@@ -112,13 +112,13 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
           disabled={busy !== null}
           className={`${btn} mt-3`}
         >
-          {busy === "import" ? "Importando…" : "Importar"}
+          {busy === "import" ? "Importing…" : "Import"}
         </button>
       </Card>
 
-      <Card title="2 · Sincronizar resultados">
+      <Card title="2 · Sync results">
         <p className="mb-3 text-sm text-muted">
-          Busca placares finalizados no provedor ativo (API-Football ou openfootball).
+          Pulls finished scores from the active provider (API-Football or openfootball).
         </p>
         <button
           type="button"
@@ -126,11 +126,11 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
           disabled={busy !== null}
           className={btn}
         >
-          {busy === "sync" ? "Sincronizando…" : "Sincronizar agora"}
+          {busy === "sync" ? "Syncing…" : "Sync now"}
         </button>
       </Card>
 
-      <Card title="3 · Resultado manual">
+      <Card title="3 · Manual result">
         <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto_auto]">
           <select
             value={matchId}
@@ -149,7 +149,7 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
             value={scoreA}
             onChange={(e) => setScoreA(Number(e.target.value))}
             className={`${field} w-20`}
-            aria-label="Placar mandante"
+            aria-label="Home score"
           />
           <input
             type="number"
@@ -157,7 +157,7 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
             value={scoreB}
             onChange={(e) => setScoreB(Number(e.target.value))}
             className={`${field} w-20`}
-            aria-label="Placar visitante"
+            aria-label="Away score"
           />
           <button
             type="button"
@@ -167,7 +167,7 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
             disabled={busy !== null || matchId === ""}
             className={btn}
           >
-            Salvar
+            Save
           </button>
         </div>
       </Card>

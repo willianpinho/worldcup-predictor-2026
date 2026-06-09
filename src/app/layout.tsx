@@ -7,9 +7,9 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Bolão Copa 2026 — Claude × Gemini",
+  title: "World Cup 2026 Prediction Pool — Claude vs Gemini",
   description:
-    "Prova de conceito: qual IA prevê melhor a fase de grupos da Copa do Mundo 2026?",
+    "A proof of concept: which AI predicts the 2026 World Cup group stage better?",
 };
 
 export default function RootLayout({
@@ -17,14 +17,14 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="pt-BR"
+      lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         <Nav />
         <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">{children}</main>
         <footer className="border-t border-border py-6 text-center text-xs text-muted">
-          PoC · dados de fixtures via openfootball / API-Football · pontuação de bolão +
+          Proof of concept · fixtures via openfootball / API-Football · pool scoring +
           Brier score
         </footer>
       </body>

@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 const links = [
-  { href: "/", label: "Placar" },
-  { href: "/matches", label: "Jogos" },
+  { href: "/", label: "Leaderboard" },
+  { href: "/matches", label: "Matches" },
   { href: "/admin", label: "Admin" },
 ];
 
@@ -13,7 +13,7 @@ export function Nav() {
         <Link href="/" className="flex items-center gap-2 font-semibold">
           <span className="text-lg">⚽</span>
           <span>
-            Bolão <span className="text-accent">Copa 2026</span>
+            WC 2026 <span className="text-accent">Pool</span>
           </span>
         </Link>
         <ul className="flex items-center gap-1 text-sm">

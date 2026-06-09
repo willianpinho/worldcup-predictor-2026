@@ -1,12 +1,12 @@
-const KICKOFF_FMT = new Intl.DateTimeFormat("pt-BR", {
+const KICKOFF_FMT = new Intl.DateTimeFormat("en-US", {
   day: "2-digit",
-  month: "2-digit",
+  month: "short",
   hour: "2-digit",
   minute: "2-digit",
   timeZone: "America/Sao_Paulo",
 });
 
-/** Kickoff shown in Brazil local time (the user's reference). */
+/** Kickoff shown in Brazil time (BRT), the project author's reference. */
 export function formatKickoff(date: Date): string {
   return KICKOFF_FMT.format(date);
 }

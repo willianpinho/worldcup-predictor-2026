@@ -37,29 +37,31 @@ export function ModelCard({
         <h2 className={`text-xl font-semibold ${meta.color}`}>{meta.name}</h2>
         {leading && (
           <span className="rounded-full bg-accent/15 px-2 py-0.5 text-xs text-accent">
-            na frente
+            leading
           </span>
         )}
       </div>
 
       <div className="mb-4">
         <div className="font-mono text-4xl font-bold">{summary.points}</div>
-        <div className="text-xs text-muted">pontos · {predicted} palpites enviados</div>
+        <div className="text-xs text-muted">
+          points · {predicted} predictions submitted
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <Stat label="Placares exatos" value={String(summary.exact)} />
-        <Stat label="Resultados certos" value={String(summary.outcomeHits)} />
-        <Stat label="Aproveitamento" value={`${summary.accuracyPct.toFixed(1)}%`} />
+        <Stat label="Exact scores" value={String(summary.exact)} />
+        <Stat label="Correct results" value={String(summary.outcomeHits)} />
+        <Stat label="Points accuracy" value={`${summary.accuracyPct.toFixed(1)}%`} />
         <Stat
-          label="Acerto de resultado"
+          label="Result accuracy"
           value={`${summary.outcomeAccuracyPct.toFixed(1)}%`}
         />
         <Stat
-          label="Brier (calibração ↓)"
+          label="Brier (calibration ↓)"
           value={summary.avgBrier === null ? "—" : summary.avgBrier.toFixed(3)}
         />
-        <Stat label="Jogos pontuados" value={String(summary.played)} />
+        <Stat label="Scored matches" value={String(summary.played)} />
       </div>
     </div>
   );

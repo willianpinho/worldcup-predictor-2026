@@ -1,10 +1,10 @@
-# Prompt de predição (saída JSON para importar)
+# Prediction prompt (JSON output for import)
 
-Cole o prompt abaixo no **Claude** e no **Gemini** (de preferência com busca na web
-ativada). Troque o valor de `"model"` para `"claude"` ou `"gemini"` conforme a IA.
-A resposta é **só o JSON** — cole inteiro na tela `/admin` → "Importar palpites".
+Paste the prompt below into **Claude** and into **Gemini / Antigravity** (ideally with
+web access enabled). Set `"model"` to `"claude"` or `"gemini"` for each AI. The response
+is **JSON only** — paste the whole thing into `/admin` → "Import".
 
-O JSON precisa bater com este formato (validado por Zod na importação):
+The JSON must match this shape (validated by Zod on import):
 
 ```json
 {
@@ -19,61 +19,61 @@ O JSON precisa bater com este formato (validado por Zod na importação):
       "probWinA": 60,
       "probDraw": 25,
       "probWinB": 15,
-      "confidence": "media",
-      "reasoning": "Mando + altitude."
+      "confidence": "medium",
+      "reasoning": "Home advantage + altitude."
     }
   ]
 }
 ```
 
-- Os nomes das seleções podem vir em PT ou EN e em qualquer ordem — o app normaliza
-  e casa pelo par de times (a tabela de aliases cobre PT-BR; nomes não reconhecidos
-  são reportados como "não casados" no resultado da importação).
-- `probWinA + probDraw + probWinB` idealmente somam 100 (são normalizados de qualquer forma).
-- `scoreA`/`scoreB` são inteiros ≥ 0. `confidence` ∈ {alta, media, baixa} (opcional).
+- Team names may be in any language and in any order — the app normalizes them and
+  matches by team pair (the alias table covers English and Portuguese; unrecognized
+  names are reported as "unmatched" in the import result).
+- `probWinA + probDraw + probWinB` should ideally sum to 100 (they are normalized anyway).
+- `scoreA`/`scoreB` are integers ≥ 0. `confidence` ∈ {high, medium, low} (optional).
 
 ---
 
 ## Prompt
 
 ```text
-Você é um analista quantitativo de futebol. Preveja TODOS os 72 jogos da fase de
-grupos da Copa do Mundo FIFA 2026 (EUA/Canadá/México, 48 seleções, 12 grupos A–L,
-disputados entre 11 e 27 de junho de 2026). Use a tabela e o sorteio OFICIAIS da FIFA;
-se tiver acesso à internet, confirme grupos, confrontos e datas reais.
+You are a quantitative football analyst. Predict ALL 72 group-stage matches of the
+2026 FIFA World Cup (hosted by the USA, Canada and Mexico; 48 teams; 12 groups A–L;
+played between June 11 and June 27, 2026). Use the OFFICIAL FIFA draw and schedule;
+if you have web access, confirm the real groups, fixtures and dates.
 
-Pondere, para cada jogo: força do elenco e qualidade individual; ranking FIFA e
-desempenho recente (eliminatórias + amistosos dos últimos 12 meses); forma dos
-jogadores-chave na temporada 2025/26; lesões/suspensões/cortes na convocação final;
-esquema tático e histórico do treinador; confrontos diretos; contexto da sede
-(viagem, fuso, ALTITUDE na Cidade do México, CALOR e UMIDADE do verão, gramado);
-vantagem de mando para os anfitriões; e sinais de mercado (odds).
+For each match, weigh: squad strength and individual quality; FIFA ranking and recent
+form (qualifiers + friendlies over the last 12 months); the form of key players in the
+2025/26 club season; injuries/suspensions/final-squad cuts; tactical setup and the
+manager's tournament record; head-to-head history; venue context (travel, time zones,
+ALTITUDE in Mexico City, summer HEAT and HUMIDITY, pitch); home advantage for the
+hosts; and market signals (betting odds).
 
-Para cada jogo, derive a probabilidade de Vitória do mandante / Empate / Vitória do
-visitante (somando 100%) e o placar mais provável. Seja calibrado: prefira acurácia
-honesta a falsa confiança.
+For each match, derive the probability of a home win / draw / away win (summing to
+100%) and the most likely scoreline. Be calibrated: prefer honest accuracy over false
+confidence.
 
-RESPONDA APENAS COM JSON VÁLIDO, sem texto antes ou depois, exatamente neste formato:
+RESPOND WITH VALID JSON ONLY, no text before or after, in exactly this shape:
 
 {
   "model": "claude",
   "predictions": [
     {
       "group": "A",
-      "teamA": "<mandante>",
-      "teamB": "<visitante>",
+      "teamA": "<home team>",
+      "teamB": "<away team>",
       "scoreA": <int>,
       "scoreB": <int>,
       "probWinA": <0-100>,
       "probDraw": <0-100>,
       "probWinB": <0-100>,
-      "confidence": "alta|media|baixa",
-      "reasoning": "<1 frase com o sinal principal>"
+      "confidence": "high|medium|low",
+      "reasoning": "<one sentence with the main signal>"
     }
   ]
 }
 
-Inclua os 72 jogos da fase de grupos. Não invente seleções, jogos ou estatísticas.
+Include all 72 group-stage matches. Do not invent teams, matches or statistics.
 ```
 
-> Para o Gemini, troque `"model": "claude"` por `"model": "gemini"` na instrução.
+> For Gemini, change `"model": "claude"` to `"model": "gemini"` in the instruction.
