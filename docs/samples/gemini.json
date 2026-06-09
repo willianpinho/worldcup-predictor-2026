@@ -1,0 +1,41 @@
+{
+  "model": "gemini",
+  "predictions": [
+    {
+      "group": "A",
+      "teamA": "Mexico",
+      "teamB": "South Africa",
+      "scoreA": 1,
+      "scoreB": 1,
+      "probWinA": 45,
+      "probDraw": 30,
+      "probWinB": 25,
+      "confidence": "baixa",
+      "reasoning": "Estreia costuma ser truncada; África do Sul defende bem."
+    },
+    {
+      "group": "A",
+      "teamA": "South Korea",
+      "teamB": "Czech Republic",
+      "scoreA": 2,
+      "scoreB": 1,
+      "probWinA": 48,
+      "probDraw": 27,
+      "probWinB": 25,
+      "confidence": "media",
+      "reasoning": "Coreia com mais ritmo ofensivo."
+    },
+    {
+      "group": "B",
+      "teamA": "Qatar",
+      "teamB": "Switzerland",
+      "scoreA": 0,
+      "scoreB": 1,
+      "probWinA": 20,
+      "probDraw": 25,
+      "probWinB": 55,
+      "confidence": "media",
+      "reasoning": "Suíça mais consistente em fase final."
+    }
+  ]
+}

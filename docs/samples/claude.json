@@ -1,0 +1,41 @@
+{
+  "model": "claude",
+  "predictions": [
+    {
+      "group": "A",
+      "teamA": "Mexico",
+      "teamB": "South Africa",
+      "scoreA": 2,
+      "scoreB": 0,
+      "probWinA": 60,
+      "probDraw": 25,
+      "probWinB": 15,
+      "confidence": "media",
+      "reasoning": "Mando de campo + altitude da Cidade do México."
+    },
+    {
+      "group": "A",
+      "teamA": "Coreia do Sul",
+      "teamB": "República Tcheca",
+      "scoreA": 1,
+      "scoreB": 1,
+      "probWinA": 35,
+      "probDraw": 33,
+      "probWinB": 32,
+      "confidence": "baixa",
+      "reasoning": "Jogo equilibrado entre seleções de nível parecido."
+    },
+    {
+      "group": "B",
+      "teamA": "Suíça",
+      "teamB": "Catar",
+      "scoreA": 2,
+      "scoreB": 0,
+      "probWinA": 65,
+      "probDraw": 20,
+      "probWinB": 15,
+      "confidence": "alta",
+      "reasoning": "Times em ordem invertida e em PT para testar normalização."
+    }
+  ]
+}
