@@ -3,6 +3,8 @@
 // input prompt and the model's output live side by side. Add a model's run by dropping a
 // JSON file in docs/runs/ and importing it here.
 import claude20260609 from "../../docs/runs/claude-2026-06-09.json";
+import gemini20260609 from "../../docs/runs/gemini-2026-06-09.json";
+import openai20260609 from "../../docs/runs/openai-2026-06-09.json";
 import type { ImportPayload } from "./importPredictions";
 
 export interface ModelRun {
@@ -20,7 +22,11 @@ interface RawRun extends ModelRun {
 }
 
 // Newest first.
-const RAW_RUNS: RawRun[] = [claude20260609 as RawRun];
+const RAW_RUNS: RawRun[] = [
+  claude20260609 as RawRun,
+  openai20260609 as RawRun,
+  gemini20260609 as RawRun,
+];
 
 export const MODEL_RUNS: ModelRun[] = RAW_RUNS.map((r) => ({
   model: r.model,
