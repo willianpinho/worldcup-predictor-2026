@@ -1,0 +1,58 @@
+// World Cup Predictor 2026 — Claude vs Gemini PoC
+// Prisma 7 with the new `prisma-client` generator + libSQL driver adapter (SQLite file).
+// SQLite has no native enums, so `status` and `model` are plain strings guarded in app code.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+/// One group-stage fixture (72 of them, groups A–L).
+model Match {
+  id        Int      @id @default(autoincrement())
+  extId     String?  @unique // API-Football fixture id (for idempotent seed/sync)
+  groupName String // 'A'..'L'
+  teamA     String
+  teamB     String
+  venue     String?
+  city      String?
+  country   String?
+  kickoff   DateTime
+  status    String   @default("SCHEDULED") // SCHEDULED | LIVE | FINISHED
+  scoreA    Int?
+  scoreB    Int?
+  round     Int      @default(1) // matchday within the group (1..3)
+
+  predictions Prediction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([groupName])
+  @@index([kickoff])
+}
+
+/// One AI's prediction for a match. Unique per (match, model).
+model Prediction {
+  id      Int   @id @default(autoincrement())
+  matchId Int
+  match   Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  model      String // 'claude' | 'gemini'
+  predA      Int
+  predB      Int
+  probWinA   Float? // 0..100
+  probDraw   Float? // 0..100
+  probWinB   Float? // 0..100
+  confidence String? // 'high' | 'medium' | 'low'
+  reasoning  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([matchId, model])
+}

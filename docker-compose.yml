@@ -1,0 +1,50 @@
+services:
+  app:
+    build: .
+    image: worldcup-predictor-2026
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      # SQLite file lives on the named volume (mounted at /app/data), not in the image.
+      DATABASE_URL: "file:./data/data.db"
+      FOOTBALL_API_KEY: "${FOOTBALL_API_KEY:-}"
+      FOOTBALL_LEAGUE_ID: "${FOOTBALL_LEAGUE_ID:-1}"
+      FOOTBALL_SEASON: "${FOOTBALL_SEASON:-2026}"
+      ADMIN_TOKEN: "${ADMIN_TOKEN:?set ADMIN_TOKEN}"
+      CRON_SECRET: "${CRON_SECRET:?set CRON_SECRET}"
+    volumes:
+      - wc_db:/app/data
+    networks:
+      - traefik-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.worldcup.rule=Host(`worldcup2026.willianpinho.com`)
+      - traefik.http.routers.worldcup.entrypoints=websecure
+      # Cloudflare-proxied prod: TLS terminated with the CF origin cert in Traefik.
+      # tls=true ONLY — no certresolver (per rules/vps-infra.md).
+      - traefik.http.routers.worldcup.tls=true
+      - traefik.http.services.worldcup.loadbalancer.server.port=3000
+      - traefik.docker.network=traefik-network
+
+  # Polls the results-sync endpoint every 30 min so scores update automatically.
+  cron:
+    image: curlimages/curl:8.11.1
+    restart: unless-stopped
+    depends_on:
+      - app
+    environment:
+      CRON_SECRET: "${CRON_SECRET:?set CRON_SECRET}"
+    networks:
+      - traefik-network
+    entrypoint:
+      - sh
+      - -c
+      - 'while true; do sleep 1800; curl -s -X POST http://app:3000/api/results/sync -H "x-cron-secret: $$CRON_SECRET" || true; done'
+
+volumes:
+  wc_db:
+
+networks:
+  # External Traefik network on the VPS (test-ash).
+  traefik-network:
+    external: true

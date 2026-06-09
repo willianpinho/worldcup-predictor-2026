@@ -1,0 +1,41 @@
+{
+  "model": "claude",
+  "predictions": [
+    {
+      "group": "A",
+      "teamA": "Mexico",
+      "teamB": "South Africa",
+      "scoreA": 2,
+      "scoreB": 0,
+      "probWinA": 60,
+      "probDraw": 25,
+      "probWinB": 15,
+      "confidence": "medium",
+      "reasoning": "Home advantage plus Mexico City altitude."
+    },
+    {
+      "group": "A",
+      "teamA": "South Korea",
+      "teamB": "Czech Republic",
+      "scoreA": 1,
+      "scoreB": 1,
+      "probWinA": 35,
+      "probDraw": 33,
+      "probWinB": 32,
+      "confidence": "low",
+      "reasoning": "Evenly matched sides of similar level."
+    },
+    {
+      "group": "B",
+      "teamA": "Switzerland",
+      "teamB": "Qatar",
+      "scoreA": 2,
+      "scoreB": 0,
+      "probWinA": 65,
+      "probDraw": 20,
+      "probWinB": 15,
+      "confidence": "high",
+      "reasoning": "Teams listed reversed to exercise name normalization."
+    }
+  ]
+}
