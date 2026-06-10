@@ -1,7 +1,6 @@
 services:
   app:
     build: .
-    image: worldcup-predictor-2026
     restart: unless-stopped
     environment:
       NODE_ENV: production
