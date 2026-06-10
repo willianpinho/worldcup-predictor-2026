@@ -5,6 +5,7 @@ const links = [
   { href: "/", label: "Leaderboard" },
   { href: "/matches", label: "Matches" },
   { href: "/standings", label: "Standings" },
+  { href: "/knockout", label: "Knockout" },
   { href: "/prompt", label: "Prompt" },
 ];
 
