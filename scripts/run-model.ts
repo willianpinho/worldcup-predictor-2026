@@ -1,15 +1,19 @@
-// Group-stage API runner. Predicts all 72 group-stage fixtures one group at a time via a
-// LiteLLM OpenAI-compatible gateway, validates each group's 6 predictions against the
-// import schema + the official fixture pairs, retries on failure, and writes a run file
-// compatible with src/lib/runs.ts + ImportSchema.
+// Group-stage runner. Predicts all 72 group-stage fixtures one group at a time, validates
+// each group's 6 predictions against the import schema + the official fixture pairs,
+// retries on failure, and writes a run file compatible with src/lib/runs.ts + ImportSchema.
+//
+// Transports (--via):
+//   litellm (default) — LiteLLM OpenAI-compatible gateway. Env: LITELLM_BASE_URL,
+//     LITELLM_API_KEY. Arms: baseline | enriched.
+//   gemini-cli — headless Gemini CLI (OAuth), --cli-model required. Arms: web (tools
+//     allowed) | baseline | enriched (the CLI's per-call tool stats must report ZERO
+//     tool calls — verified, not just instructed).
 //
 // Usage:
 //   pnpm tsx scripts/run-model.ts --model claude --engine "Claude Opus 4.8" \
-//     --litellm-model claude-opus-4-8 --condition baseline
-//   pnpm tsx scripts/run-model.ts --model gemini --engine "Gemini 3 Pro" \
-//     --litellm-model gemini-3-pro --condition enriched --context docs/context/team-context.json
-//
-// Env: LITELLM_BASE_URL (default http://localhost:4000), LITELLM_API_KEY (required).
+//     --litellm-model wc/claude --condition baseline
+//   pnpm tsx scripts/run-model.ts --model gemini --engine "Gemini 3.1 Pro Preview" \
+//     --via gemini-cli --cli-model gemini-3.1-pro-preview --condition web
 
 import "dotenv/config";
 import { readFileSync, writeFileSync } from "node:fs";
@@ -23,6 +27,7 @@ import {
 import { isCondition } from "../src/lib/conditions";
 import { PredictionItem } from "../src/lib/importPredictions";
 import { pairKey } from "../src/lib/teams";
+import { chatViaGeminiCli } from "./lib/geminiCli";
 import {
   chat,
   fail,
@@ -31,6 +36,14 @@ import {
   parseJson,
   requireEnv,
 } from "./lib/llm";
+
+/** Transport-agnostic single-prompt sender. */
+type SendFn = (prompt: string) => Promise<{
+  content: string;
+  totalTokens?: number;
+  /** Tool invocations made for this prompt; undefined when the transport has no tools. */
+  toolCalls?: number;
+}>;
 
 const MODELS = ["claude", "gemini", "openai"] as const;
 const GROUPS = [
@@ -120,20 +133,34 @@ function validateGroup(parsed: unknown, gf: GroupFixtures): string[] {
 
 /** Run one group with retries; returns its 6 validated predictions. */
 async function runGroup(
-  cfg: GatewayConfig,
+  send: SendFn,
   model: string,
   gf: GroupFixtures,
   contextBlock: string | undefined,
+  opts: { web: boolean; requireNoTools: boolean },
 ): Promise<z.infer<typeof PredictionItem>[]> {
   const basePrompt = groupPromptFor(
     gf.group,
     gf.fixtures,
     contextBlock,
+    opts.web,
   ).replace('"model": "claude"', `"model": "${model}"`);
   let prompt = basePrompt;
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    const { content, totalTokens } = await chat(cfg, prompt);
+    const { content, totalTokens, toolCalls } = await send(prompt);
+    if (opts.requireNoTools && (toolCalls ?? 0) > 0) {
+      // Arm violation, not a model error: the no-tools condition must hold. Retry raw.
+      if (attempt === MAX_RETRIES) {
+        fail(
+          `Group ${gf.group}: transport used ${toolCalls} tool call(s) on every attempt — no-tools arm violated`,
+        );
+      }
+      console.log(
+        `  group ${gf.group}: attempt ${attempt} used ${toolCalls} tool call(s), retrying`,
+      );
+      continue;
+    }
     let parsed: unknown;
     try {
       parsed = parseJson(content);
@@ -178,13 +205,18 @@ async function main(): Promise<void> {
   const engine = flags.engine;
   if (!engine || engine === "true")
     fail('--engine "<human label>" is required');
-  const litellmModel = flags["litellm-model"];
-  if (!litellmModel || litellmModel === "true")
-    fail("--litellm-model <gateway model> is required");
+  const via = flags.via || "litellm";
+  if (via !== "litellm" && via !== "gemini-cli")
+    fail("--via must be litellm or gemini-cli");
 
   const condition = flags.condition;
-  if (!condition || !isCondition(condition) || condition === "web") {
-    fail("--condition must be baseline or enriched");
+  if (!condition || !isCondition(condition)) {
+    fail("--condition must be web, baseline or enriched");
+  }
+  if (condition === "web" && via !== "gemini-cli") {
+    fail(
+      "the web arm runs only via gemini-cli (a transport with live web tools)",
+    );
   }
 
   let dataset: TeamContextDataset | undefined;
@@ -198,28 +230,48 @@ async function main(): Promise<void> {
     ) as TeamContextDataset;
   }
 
-  const baseUrl =
-    flags["base-url"] ||
-    process.env.LITELLM_BASE_URL ||
-    "http://localhost:4000";
-  const apiKey = requireEnv("LITELLM_API_KEY");
-  const temperature = flags.temperature ? Number(flags.temperature) : 0.2;
-  if (Number.isNaN(temperature)) fail("--temperature must be a number");
+  // Provider default unless explicitly set — some models reject the parameter outright.
+  const temperature = flags.temperature ? Number(flags.temperature) : undefined;
+  if (temperature !== undefined && Number.isNaN(temperature))
+    fail("--temperature must be a number");
 
   const today = new Date().toISOString().slice(0, 10);
   const out = flags.out || `docs/runs/${model}-${condition}-${today}.json`;
 
-  const cfg: GatewayConfig = {
-    baseUrl,
-    model: litellmModel,
-    apiKey,
-    temperature,
-  };
+  let send: SendFn;
+  let transportNote: string;
+  if (via === "gemini-cli") {
+    const cliModel = flags["cli-model"];
+    if (!cliModel || cliModel === "true")
+      fail("--cli-model <gemini model id> is required with --via gemini-cli");
+    send = async (prompt) => chatViaGeminiCli(cliModel, prompt);
+    transportNote = `Gemini CLI (${cliModel}, OAuth)`;
+    console.log(`Running ${model} / ${condition} via gemini CLI (${cliModel})`);
+  } else {
+    const litellmModel = flags["litellm-model"];
+    if (!litellmModel || litellmModel === "true")
+      fail("--litellm-model <gateway model> is required");
+    const baseUrl =
+      flags["base-url"] ||
+      process.env.LITELLM_BASE_URL ||
+      "http://localhost:4000";
+    const apiKey = requireEnv("LITELLM_API_KEY");
+    const cfg: GatewayConfig = {
+      baseUrl,
+      model: litellmModel,
+      apiKey,
+      temperature,
+    };
+    send = (prompt) => chat(cfg, prompt);
+    transportNote = `LiteLLM (${litellmModel}, temp ${temperature ?? "provider default"})`;
+    console.log(
+      `Running ${model} / ${condition} via ${litellmModel} @ ${baseUrl} (temp ${temperature ?? "provider default"})`,
+    );
+  }
   const groups = loadFixtures();
 
-  console.log(
-    `Running ${model} / ${condition} via ${litellmModel} @ ${baseUrl} (temp ${temperature})`,
-  );
+  const web = condition === "web";
+  const runOpts = { web, requireNoTools: via === "gemini-cli" && !web };
 
   const predictions: z.infer<typeof PredictionItem>[] = [];
   // The exact per-group template used (group "A"), for the run file's `prompt` field.
@@ -227,13 +279,14 @@ async function main(): Promise<void> {
     "A",
     groups[0].fixtures,
     dataset ? renderContextBlock("A", groups[0].fixtures, dataset) : undefined,
+    web,
   );
 
   for (const gf of groups) {
     const contextBlock = dataset
       ? renderContextBlock(gf.group, gf.fixtures, dataset)
       : undefined;
-    const groupPreds = await runGroup(cfg, model, gf, contextBlock);
+    const groupPreds = await runGroup(send, model, gf, contextBlock, runOpts);
     predictions.push(...groupPreds);
   }
 
@@ -246,7 +299,11 @@ async function main(): Promise<void> {
     condition,
     generatedAt: new Date().toISOString(),
     engine,
-    notes: `API ${condition} arm via LiteLLM (${litellmModel}, temp ${temperature}). Fixtures provided per group; no tools.`,
+    notes: web
+      ? `Web arm via ${transportNote}. Fixtures provided per group; live web tools allowed.`
+      : `API ${condition} arm via ${transportNote}. Fixtures provided per group; no tools${
+          via === "gemini-cli" ? " (verified: 0 tool calls per request)" : ""
+        }.`,
     prompt: promptTemplate,
     predictions,
   };

@@ -9,7 +9,8 @@ export interface GatewayConfig {
   model: string;
   /** Bearer key (from LITELLM_API_KEY). */
   apiKey: string;
-  temperature: number;
+  /** Omitted from the request when undefined — some models reject the parameter. */
+  temperature?: number;
   maxTokens?: number;
 }
 
@@ -33,9 +34,9 @@ export async function chat(
 ): Promise<ChatResult> {
   const body: Record<string, unknown> = {
     model: cfg.model,
-    temperature: cfg.temperature,
     messages: [{ role: "user", content: prompt }],
   };
+  if (cfg.temperature !== undefined) body.temperature = cfg.temperature;
   if (cfg.maxTokens !== undefined) body.max_tokens = cfg.maxTokens;
 
   const res = await fetch(

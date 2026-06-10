@@ -44,6 +44,11 @@ exact fixtures you must predict are listed below, so this is a test of your judg
 the OUTCOMES, not of your memory of the official draw. Do not add, drop or reorder any
 fixture.`;
 
+/** Prepended to web-arm runs executed per group (chat/CLI with live web access). */
+export const WEB_HEADER = `You have live web access. Confirm squads, recent form, injuries/suspensions and market
+odds as needed before answering. The exact fixtures you must predict are listed below.
+Do not add, drop or reorder any fixture.`;
+
 /** Prepended to enriched API runs: baseline rules PLUS the standardized-data instruction. */
 export const ENRICHED_HEADER = `You are answering through an API with NO web access and NO tools. Use ONLY your own
 internal football knowledge — do not browse, search, or claim to look anything up. The
@@ -67,13 +72,19 @@ function renderFixtures(fixtures: Fixture[]): string {
  * prompt.ts but scopes the task to ONE group's 6 listed fixtures (in order), demanding the
  * same JSON shape with EXACTLY those 6 predictions. Pass `contextBlock` for the enriched
  * arm — its presence switches the header from baseline to enriched and injects the block.
+ * Pass `web` for the web arm (live web access allowed; contextBlock is ignored).
  */
 export function groupPromptFor(
   group: string,
   fixtures: Fixture[],
   contextBlock?: string,
+  web = false,
 ): string {
-  const header = contextBlock ? ENRICHED_HEADER : BASELINE_HEADER;
+  const header = web
+    ? WEB_HEADER
+    : contextBlock
+      ? ENRICHED_HEADER
+      : BASELINE_HEADER;
   const context = contextBlock ? `\n\n${contextBlock}\n` : "";
 
   return `You are a quantitative football analyst predicting matches of the 2026 FIFA World Cup
