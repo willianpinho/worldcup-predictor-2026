@@ -164,7 +164,11 @@ async function main(): Promise<void> {
     console.log(
       `  attempt ${attempt}: ${result.errors.length} validation issue(s), retrying`,
     );
-    prompt = `${basePrompt}\n\nYour previous reply had these problems. Fix them and reply with JSON only:\n- ${result.errors.join("\n- ")}`;
+    // Cap the feedback — hundreds of issues bloat the prompt and derail the model.
+    const top = result.errors.slice(0, 25);
+    prompt = `${basePrompt}\n\nYour previous reply had these problems${
+      result.errors.length > top.length ? ` (first ${top.length} shown)` : ""
+    }. Fix them and reply with JSON only:\n- ${top.join("\n- ")}`;
   }
 }
 

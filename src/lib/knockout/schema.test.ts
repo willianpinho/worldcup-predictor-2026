@@ -50,16 +50,18 @@ describe("parseKnockoutRun", () => {
     if (!result.ok) expect(result.errors.join("\n")).toMatch(/level score/i);
   });
 
-  it("rejects a bracket adjacency violation", () => {
+  it("rejects a round-progression violation (R16 team that lost in R32)", () => {
     const run = clone();
-    // roundOf16[0].teamA must be the winner of roundOf32[0] (T01); break it.
-    run.rounds.roundOf16[0].teamA = "T03";
-    run.rounds.roundOf16[0].winner = "T03";
+    // T02 lost roundOf32[0]; smuggling it into the round of 16 must fail. The pairing
+    // topology itself is free-form (set-based check), so only non-winners are rejected.
+    run.rounds.roundOf16[0].teamA = "T02";
+    run.rounds.roundOf16[0].winner = "T02";
     run.rounds.roundOf16[0].scoreA = 1;
     run.rounds.roundOf16[0].scoreB = 0;
     const result = parseKnockoutRun(run);
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.errors.join("\n")).toMatch(/winner of R32/i);
+    if (!result.ok)
+      expect(result.errors.join("\n")).toMatch(/did not win a match/i);
   });
 
   it("rejects a regulation match that ended level", () => {

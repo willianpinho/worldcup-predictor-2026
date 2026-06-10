@@ -1,7 +1,7 @@
 // Zod v4 schema for one model's FULL 2026 World Cup knockout-bracket prediction.
 // Each AI derives its 32 qualifiers from ITS OWN group-stage scorelines, places them in
 // the official Round-of-32 bracket, and predicts every tie to the champion. The schema
-// validates internal consistency (winners, scores, penalties, bracket adjacency); the
+// validates internal consistency (winners, scores, penalties, round progression); the
 // bracket STRUCTURE the model proposes is its own claim and part of the experiment.
 import { z } from "zod";
 import { normalizeTeam } from "../teams";
@@ -137,22 +137,26 @@ function checkMatch(
   }
 }
 
-// The two teams of `child` must be the winners of its two `parents`, in order.
-function checkAdjacency(
-  child: KoMatch,
-  parents: [KoMatch, KoMatch],
+// Every team of the child round must be a winner of the parent round. Combined with the
+// per-round duplicate check (and fixed round sizes: 16→8→4→2→1), this forces the child
+// round to be a perfect matching of the parents' winners WITHOUT pinning who-meets-whom
+// to array positions — the official FIFA bracket is not an adjacent fold, and the exact
+// pairing topology is the model's own claim (part of the experiment).
+function checkRoundFeeds(
+  children: KoMatch[],
+  parents: KoMatch[],
   ctx: z.core.$RefinementCtx,
   where: string,
 ): void {
-  const [p0, p1] = parents;
-  if (!eq(child.teamA, p0.winner))
-    ctx.addIssue(
-      `${where}.teamA "${child.teamA}" must be the winner of ${p0.slot} (${p0.winner})`,
-    );
-  if (!eq(child.teamB, p1.winner))
-    ctx.addIssue(
-      `${where}.teamB "${child.teamB}" must be the winner of ${p1.slot} (${p1.winner})`,
-    );
+  const winners = new Set(parents.map((p) => normalizeTeam(p.winner)));
+  children.forEach((m, i) => {
+    for (const t of [m.teamA, m.teamB]) {
+      if (!winners.has(normalizeTeam(t)))
+        ctx.addIssue(
+          `${where}[${i}]: "${t}" did not win a match in the previous round`,
+        );
+    }
+  });
 }
 
 // No two matches in a round may share a team.
@@ -209,32 +213,12 @@ export const KnockoutRunSchema = Base.superRefine((run, ctx) => {
     }
   }
 
-  // 3. Bracket adjacency: roundOf16[i] fed by roundOf32[2i], roundOf32[2i+1]; same upward.
-  roundOf16.forEach((m, i) =>
-    checkAdjacency(
-      m,
-      [roundOf32[2 * i], roundOf32[2 * i + 1]],
-      ctx,
-      `roundOf16[${i}]`,
-    ),
-  );
-  quarterfinals.forEach((m, i) =>
-    checkAdjacency(
-      m,
-      [roundOf16[2 * i], roundOf16[2 * i + 1]],
-      ctx,
-      `quarterfinals[${i}]`,
-    ),
-  );
-  semifinals.forEach((m, i) =>
-    checkAdjacency(
-      m,
-      [quarterfinals[2 * i], quarterfinals[2 * i + 1]],
-      ctx,
-      `semifinals[${i}]`,
-    ),
-  );
-  checkAdjacency(final, [semifinals[0], semifinals[1]], ctx, "final");
+  // 3. Round progression: each round is a perfect matching of the previous round's
+  // winners (set-based — pairing topology is the model's claim, see checkRoundFeeds).
+  checkRoundFeeds(roundOf16, roundOf32, ctx, "roundOf16");
+  checkRoundFeeds(quarterfinals, roundOf16, ctx, "quarterfinals");
+  checkRoundFeeds(semifinals, quarterfinals, ctx, "semifinals");
+  checkRoundFeeds([final], semifinals, ctx, "final");
 
   // 4. Third-place match is contested by the two semi-final losers.
   const sfLosers = semifinals.map((sf) =>
