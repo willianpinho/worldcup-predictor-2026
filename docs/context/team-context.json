@@ -1,0 +1,305 @@
+{
+  "snapshotDate": "2026-06-10",
+  "sources": {
+    "fifaRanking": {
+      "name": "FIFA/Coca-Cola Men's World Ranking",
+      "url": "https://inside.fifa.com/fifa-world-ranking/men",
+      "releaseDate": "2026-04-01"
+    },
+    "elo": {
+      "name": "World Football Elo Ratings",
+      "url": "https://www.eloratings.net",
+      "retrievedAt": "2026-06-10"
+    }
+  },
+  "teams": [
+    {
+      "team": "Algeria",
+      "confederation": "CAF",
+      "fifaRank": 28,
+      "elo": 1760
+    },
+    {
+      "team": "Argentina",
+      "confederation": "CONMEBOL",
+      "fifaRank": 3,
+      "elo": 2115
+    },
+    {
+      "team": "Australia",
+      "confederation": "AFC",
+      "fifaRank": 27,
+      "elo": 1777
+    },
+    {
+      "team": "Austria",
+      "confederation": "UEFA",
+      "fifaRank": 24,
+      "elo": 1830
+    },
+    {
+      "team": "Belgium",
+      "confederation": "UEFA",
+      "fifaRank": 9,
+      "elo": 1894
+    },
+    {
+      "team": "Bosnia & Herzegovina",
+      "confederation": "UEFA",
+      "fifaRank": 65,
+      "elo": 1595
+    },
+    {
+      "team": "Brazil",
+      "confederation": "CONMEBOL",
+      "fifaRank": 6,
+      "elo": 1991
+    },
+    {
+      "team": "Canada",
+      "confederation": "CONCACAF",
+      "fifaRank": 30,
+      "elo": 1788
+    },
+    {
+      "team": "Cape Verde",
+      "confederation": "CAF",
+      "fifaRank": 69,
+      "elo": 1578
+    },
+    {
+      "team": "Colombia",
+      "confederation": "CONMEBOL",
+      "fifaRank": 13,
+      "elo": 1982
+    },
+    {
+      "team": "Croatia",
+      "confederation": "UEFA",
+      "fifaRank": 11,
+      "elo": 1912
+    },
+    {
+      "team": "Curaçao",
+      "confederation": "CONCACAF",
+      "fifaRank": 82,
+      "elo": 1434
+    },
+    {
+      "team": "Czech Republic",
+      "confederation": "UEFA",
+      "fifaRank": 41,
+      "elo": 1740
+    },
+    {
+      "team": "DR Congo",
+      "confederation": "CAF",
+      "fifaRank": 46,
+      "elo": 1652
+    },
+    {
+      "team": "Ecuador",
+      "confederation": "CONMEBOL",
+      "fifaRank": 23,
+      "elo": 1938
+    },
+    {
+      "team": "Egypt",
+      "confederation": "CAF",
+      "fifaRank": 29,
+      "elo": 1696
+    },
+    {
+      "team": "England",
+      "confederation": "UEFA",
+      "fifaRank": 4,
+      "elo": 2021
+    },
+    {
+      "team": "France",
+      "confederation": "UEFA",
+      "fifaRank": 1,
+      "elo": 2063
+    },
+    {
+      "team": "Germany",
+      "confederation": "UEFA",
+      "fifaRank": 10,
+      "elo": 1932
+    },
+    {
+      "team": "Ghana",
+      "confederation": "CAF",
+      "fifaRank": 74,
+      "elo": 1510
+    },
+    {
+      "team": "Haiti",
+      "confederation": "CONCACAF",
+      "fifaRank": 83,
+      "elo": 1548
+    },
+    {
+      "team": "Iran",
+      "confederation": "AFC",
+      "fifaRank": 21,
+      "elo": 1772
+    },
+    {
+      "team": "Iraq",
+      "confederation": "AFC",
+      "fifaRank": 57,
+      "elo": 1607
+    },
+    {
+      "team": "Ivory Coast",
+      "confederation": "CAF",
+      "fifaRank": 34,
+      "elo": 1695
+    },
+    {
+      "team": "Japan",
+      "confederation": "AFC",
+      "fifaRank": 18,
+      "elo": 1906
+    },
+    {
+      "team": "Jordan",
+      "confederation": "AFC",
+      "fifaRank": 63,
+      "elo": 1680
+    },
+    {
+      "team": "Mexico",
+      "confederation": "CONCACAF",
+      "fifaRank": 15,
+      "elo": 1875
+    },
+    {
+      "team": "Morocco",
+      "confederation": "CAF",
+      "fifaRank": 8,
+      "elo": 1827
+    },
+    {
+      "team": "Netherlands",
+      "confederation": "UEFA",
+      "fifaRank": 7,
+      "elo": 1948
+    },
+    {
+      "team": "New Zealand",
+      "confederation": "OFC",
+      "fifaRank": 85,
+      "elo": 1562
+    },
+    {
+      "team": "Norway",
+      "confederation": "UEFA",
+      "fifaRank": 31,
+      "elo": 1914
+    },
+    {
+      "team": "Panama",
+      "confederation": "CONCACAF",
+      "fifaRank": 33,
+      "elo": 1730
+    },
+    {
+      "team": "Paraguay",
+      "confederation": "CONMEBOL",
+      "fifaRank": 40,
+      "elo": 1834
+    },
+    {
+      "team": "Portugal",
+      "confederation": "UEFA",
+      "fifaRank": 5,
+      "elo": 1986
+    },
+    {
+      "team": "Qatar",
+      "confederation": "AFC",
+      "fifaRank": 55,
+      "elo": 1421
+    },
+    {
+      "team": "Saudi Arabia",
+      "confederation": "AFC",
+      "fifaRank": 61,
+      "elo": 1576
+    },
+    {
+      "team": "Scotland",
+      "confederation": "UEFA",
+      "fifaRank": 43,
+      "elo": 1782
+    },
+    {
+      "team": "Senegal",
+      "confederation": "CAF",
+      "fifaRank": 14,
+      "elo": 1860
+    },
+    {
+      "team": "South Africa",
+      "confederation": "CAF",
+      "fifaRank": 60,
+      "elo": 1517
+    },
+    {
+      "team": "South Korea",
+      "confederation": "AFC",
+      "fifaRank": 25,
+      "elo": 1758
+    },
+    {
+      "team": "Spain",
+      "confederation": "UEFA",
+      "fifaRank": 2,
+      "elo": 2157
+    },
+    {
+      "team": "Sweden",
+      "confederation": "UEFA",
+      "fifaRank": 38,
+      "elo": 1712
+    },
+    {
+      "team": "Switzerland",
+      "confederation": "UEFA",
+      "fifaRank": 19,
+      "elo": 1891
+    },
+    {
+      "team": "Tunisia",
+      "confederation": "CAF",
+      "fifaRank": 44,
+      "elo": 1628
+    },
+    {
+      "team": "Turkey",
+      "confederation": "UEFA",
+      "fifaRank": 22,
+      "elo": 1911
+    },
+    {
+      "team": "USA",
+      "confederation": "CONCACAF",
+      "fifaRank": 16,
+      "elo": 1726
+    },
+    {
+      "team": "Uruguay",
+      "confederation": "CONMEBOL",
+      "fifaRank": 17,
+      "elo": 1892
+    },
+    {
+      "team": "Uzbekistan",
+      "confederation": "AFC",
+      "fifaRank": 50,
+      "elo": 1714
+    }
+  ]
+}
