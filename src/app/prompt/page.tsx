@@ -12,7 +12,14 @@ export const metadata: Metadata = {
 const MODEL_LABEL: Record<string, string> = {
   claude: "Claude",
   gemini: "Gemini",
+  openai: "OpenAI",
 };
+
+const PROMPT_DOCS = [
+  { file: "docs/PROMPT.md", label: "Group stage (web arm)" },
+  { file: "docs/PROMPT-ENRICHED.md", label: "API arms (baseline + enriched)" },
+  { file: "docs/PROMPT-KNOCKOUT.md", label: "Knockout bracket" },
+];
 
 export default function PromptPage() {
   return (
@@ -38,6 +45,32 @@ export default function PromptPage() {
         <pre className="overflow-x-auto whitespace-pre-wrap px-4 py-4 font-mono text-xs leading-relaxed text-foreground">
           {PREDICTION_PROMPT}
         </pre>
+      </div>
+
+      <div className="rounded-xl border border-border bg-surface p-4 text-sm text-muted">
+        <h2 className="mb-2 font-semibold text-foreground">
+          Full methodology, in the open
+        </h2>
+        <p>
+          Every prompt variant, the standardized context dataset, the runner
+          scripts and every raw model run are versioned in the public
+          repository:
+        </p>
+        <ul className="mt-2 space-y-1">
+          {PROMPT_DOCS.map((d) => (
+            <li key={d.file}>
+              <a
+                href={`https://github.com/willianpinho/worldcup-predictor-2026/blob/master/${d.file}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-foreground underline decoration-border underline-offset-2 hover:text-accent"
+              >
+                {d.file}
+              </a>{" "}
+              — {d.label}
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div className="rounded-xl border border-border bg-surface p-4 text-sm text-muted">
