@@ -9,12 +9,6 @@ import {
 
 const TEAMS = ["Alpha", "Bravo", "Charlie", "Delta"];
 
-function row(group: GroupStanding, team: string): StandingRow {
-  const r = group.rows.find((x) => x.team === team);
-  if (!r) throw new Error(`team ${team} missing`);
-  return r;
-}
-
 describe("computeGroup", () => {
   it("returns all teams with zeros when nothing is played", () => {
     const rows = computeGroup(TEAMS, []);
