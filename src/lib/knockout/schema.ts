@@ -32,23 +32,31 @@ const DecidedBy = z.enum(["regulation", "extra-time", "penalties"]);
 
 const SLOT_RE = /^(R32-(?:[1-9]|1[0-6])|R16-[1-8]|QF-[1-4]|SF-[12]|TP|F)$/;
 
-const KoMatch = z.object({
-  slot: z
-    .string()
-    .regex(
-      SLOT_RE,
-      "slot must be R32-1..16, R16-1..8, QF-1..4, SF-1..2, TP or F",
-    ),
-  teamA: Team,
-  teamB: Team,
-  scoreA: Score,
-  scoreB: Score,
-  decidedBy: DecidedBy,
-  pensA: z.number().int().min(0).max(30).optional(),
-  pensB: z.number().int().min(0).max(30).optional(),
-  winner: Team,
-  reasoning: z.string().optional(),
-});
+const KoMatch = z
+  .object({
+    slot: z
+      .string()
+      .regex(
+        SLOT_RE,
+        "slot must be R32-1..16, R16-1..8, QF-1..4, SF-1..2, TP or F",
+      ),
+    teamA: Team,
+    teamB: Team,
+    scoreA: Score,
+    scoreB: Score,
+    decidedBy: DecidedBy,
+    pensA: z.number().int().min(0).max(30).optional(),
+    pensB: z.number().int().min(0).max(30).optional(),
+    winner: Team,
+    reasoning: z.string().optional(),
+  })
+  .transform((m) => {
+    // Models sometimes read the documented `"winner": "<teamA|teamB>"` placeholder
+    // literally; resolve the side keyword to the actual team name.
+    if (m.winner === "teamA") return { ...m, winner: m.teamA };
+    if (m.winner === "teamB") return { ...m, winner: m.teamB };
+    return m;
+  });
 export type KoMatch = z.infer<typeof KoMatch>;
 
 const groupRecord = z.object(Object.fromEntries(GROUPS.map((g) => [g, Team])));
