@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CopyButton } from "@/components/CopyButton";
+import { CONDITION_META } from "@/lib/conditions";
 import { formatRunTimestamp } from "@/lib/format";
 import { PREDICTION_PROMPT } from "@/lib/prompt";
 import { importableJson, MODEL_RUNS } from "@/lib/runs";
@@ -19,9 +20,9 @@ export default function PromptPage() {
       <div>
         <h1 className="text-2xl font-bold">The prompt</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted">
-          The exact instruction given to Claude, Gemini and OpenAI. Each model returns
-          JSON only, which is pasted into <span className="font-mono">/admin</span> to
-          score the pool. Set{" "}
+          The exact instruction given to Claude, Gemini and OpenAI. Each model
+          returns JSON only, which is pasted into{" "}
+          <span className="font-mono">/admin</span> to score the pool. Set{" "}
           <span className="font-mono">&quot;model&quot;</span> to{" "}
           <span className="font-mono">&quot;claude&quot;</span>,{" "}
           <span className="font-mono">&quot;gemini&quot;</span> or{" "}
@@ -40,13 +41,15 @@ export default function PromptPage() {
       </div>
 
       <div className="rounded-xl border border-border bg-surface p-4 text-sm text-muted">
-        <h2 className="mb-2 font-semibold text-foreground">Why these signals</h2>
+        <h2 className="mb-2 font-semibold text-foreground">
+          Why these signals
+        </h2>
         <p>
           The prompt asks each model to reason from squad strength, recent form,
-          availability, tactics, head-to-head, venue context (altitude, heat, travel),
-          host advantage, and market odds — then commit to a scoreline and calibrated
-          win/draw/loss probabilities. The Brier score on the leaderboard rewards honest
-          probabilities, not just correct calls.
+          availability, tactics, head-to-head, venue context (altitude, heat,
+          travel), host advantage, and market odds — then commit to a scoreline
+          and calibrated win/draw/loss probabilities. The Brier score on the
+          leaderboard rewards honest probabilities, not just correct calls.
         </p>
       </div>
 
@@ -55,9 +58,10 @@ export default function PromptPage() {
           <div>
             <h2 className="text-xl font-bold">Model runs</h2>
             <p className="mt-1 max-w-2xl text-sm text-muted">
-              The exact JSON each model returned for the prompt above — the output that
-              feeds <span className="font-mono">/admin</span> → Import. Copy a run to
-              re-import it, or expand to inspect all 72 predictions.
+              The exact JSON each model returned for the prompt above — the
+              output that feeds <span className="font-mono">/admin</span> →
+              Import. Copy a run to re-import it, or expand to inspect all 72
+              predictions.
             </p>
           </div>
 
@@ -65,13 +69,16 @@ export default function PromptPage() {
             const json = importableJson(run);
             return (
               <div
-                key={`${run.model}-${run.generatedAt}`}
+                key={`${run.model}-${run.condition}-${run.generatedAt}`}
                 className="overflow-hidden rounded-2xl border border-border bg-surface"
               >
                 <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-2">
                   <div className="flex items-center gap-2 text-xs">
                     <span className="rounded-md bg-surface-2 px-2 py-0.5 font-medium text-foreground">
                       {MODEL_LABEL[run.model] ?? run.model}
+                    </span>
+                    <span className="rounded-md bg-accent/15 px-2 py-0.5 font-medium text-accent">
+                      {CONDITION_META[run.condition].label}
                     </span>
                     <span className="text-muted">{run.engine}</span>
                     <span className="text-muted">·</span>

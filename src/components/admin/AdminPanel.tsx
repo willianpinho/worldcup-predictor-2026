@@ -11,6 +11,7 @@ type Json = Record<string, unknown>;
 
 const SAMPLE = `{
   "model": "claude",
+  "condition": "web",
   "predictions": [
     { "group": "A", "teamA": "Mexico", "teamB": "South Africa",
       "scoreA": 2, "scoreB": 0,
@@ -19,7 +20,13 @@ const SAMPLE = `{
   ]
 }`;
 
-function Card({ title, children }: { title: string; children: React.ReactNode }) {
+function Card({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <section className="rounded-2xl border border-border bg-surface p-5">
       <h2 className="mb-3 font-semibold">{title}</h2>
@@ -49,7 +56,10 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
       });
       const data = (await res.json()) as Json;
       if (!res.ok) {
-        setMsg({ ok: false, text: `Error ${res.status}: ${JSON.stringify(data)}` });
+        setMsg({
+          ok: false,
+          text: `Error ${res.status}: ${JSON.stringify(data)}`,
+        });
       } else {
         setMsg({ ok: true, text: JSON.stringify(data) });
       }
@@ -81,7 +91,8 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
       <div>
         <h1 className="text-2xl font-bold">Admin</h1>
         <p className="mt-1 text-sm text-muted">
-          Import each AI&apos;s predictions, sync results, and override scores manually.
+          Import each AI&apos;s predictions, sync results, and override scores
+          manually.
         </p>
       </div>
 
@@ -94,7 +105,8 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
           className={field}
         />
         <p className="mt-2 text-xs text-muted">
-          Sent in the <code>x-admin-token</code> header. Set via env on the server.
+          Sent in the <code>x-admin-token</code> header. Set via env on the
+          server.
         </p>
       </Card>
 
@@ -114,11 +126,18 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
         >
           {busy === "import" ? "Importing…" : "Import"}
         </button>
+        <p className="mt-2 text-xs text-muted">
+          Add an optional <code>&quot;condition&quot;</code> (<code>web</code>,{" "}
+          <code>baseline</code> or <code>enriched</code>) to file the run under
+          the matching experiment arm — it defaults to <code>web</code> when
+          omitted.
+        </p>
       </Card>
 
       <Card title="2 · Sync results">
         <p className="mb-3 text-sm text-muted">
-          Pulls finished scores from the active provider (API-Football or openfootball).
+          Pulls finished scores from the active provider (API-Football or
+          openfootball).
         </p>
         <button
           type="button"
@@ -162,7 +181,11 @@ export function AdminPanel({ matches }: { matches: MatchOption[] }) {
           <button
             type="button"
             onClick={() =>
-              void post("/api/results/manual", { matchId, scoreA, scoreB }, "manual")
+              void post(
+                "/api/results/manual",
+                { matchId, scoreA, scoreB },
+                "manual",
+              )
             }
             disabled={busy !== null || matchId === ""}
             className={btn}
