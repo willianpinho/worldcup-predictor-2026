@@ -25,8 +25,14 @@ export default function RootLayout({
         <Nav />
         <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:py-8">{children}</main>
         <footer className="border-t border-border py-6 text-center text-xs text-muted">
-          Proof of concept · fixtures via openfootball / API-Football · pool scoring +
-          Brier score
+          <p>
+            Proof of concept · fixtures via openfootball / API-Football · pool
+            scoring + Brier score
+          </p>
+          <p className="mt-1">
+            An independent project by Willian Pinho — not affiliated with, or
+            endorsed by, Anthropic, Google, or OpenAI.
+          </p>
         </footer>
       </body>
     </html>
