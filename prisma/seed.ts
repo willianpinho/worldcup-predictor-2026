@@ -42,7 +42,10 @@ async function main() {
   }
 
   const after = await prisma.match.count();
-  const groups = await prisma.match.groupBy({ by: ["groupName"], _count: true });
+  const groups = await prisma.match.groupBy({
+    by: ["groupName"],
+    _count: true,
+  });
   console.log(
     `Seed done. Matches: ${after} (created ${after - before}). Groups: ${groups
       .map((g) => `${g.groupName}=${g._count}`)
@@ -51,11 +54,15 @@ async function main() {
   );
 
   // Auto-import recorded model runs so the leaderboard/matches reflect them with
-  // no manual /admin step. Idempotent (upsert per match+model).
+  // no manual /admin step. Idempotent (upsert per match+model+condition).
   for (const run of MODEL_RUNS) {
-    const r = await importPredictions({ model: run.model, predictions: run.predictions });
+    const r = await importPredictions({
+      model: run.model,
+      condition: run.condition,
+      predictions: run.predictions,
+    });
     console.log(
-      `Imported run "${run.engine}" (${run.model}): ${r.imported}/${r.total}` +
+      `Imported run "${run.engine}" (${run.model}/${run.condition}): ${r.imported}/${r.total}` +
         (r.unmatched.length ? ` — ${r.unmatched.length} unmatched` : ""),
     );
   }

@@ -1,8 +1,10 @@
 import { z } from "zod";
+import { CONDITIONS } from "./conditions";
 import { prisma } from "./db";
 import { normalizeTeam, pairKey } from "./teams";
 
-const PredictionItem = z.object({
+/** One predicted fixture as emitted by a model run (web chat or API runner). */
+export const PredictionItem = z.object({
   group: z.string().optional(),
   teamA: z.string().min(1),
   teamB: z.string().min(1),
@@ -15,8 +17,12 @@ const PredictionItem = z.object({
   reasoning: z.string().optional(),
 });
 
+export type PredictionItem = z.infer<typeof PredictionItem>;
+
 export const ImportSchema = z.object({
   model: z.enum(["claude", "gemini", "openai"]),
+  // Experiment arm; legacy payloads without it default to the original web runs.
+  condition: z.enum(CONDITIONS).default("web"),
   predictions: z.array(PredictionItem).min(1),
 });
 
@@ -24,6 +30,7 @@ export type ImportPayload = z.infer<typeof ImportSchema>;
 
 export interface ImportReport {
   model: string;
+  condition: string;
   total: number;
   imported: number;
   unmatched: string[];
@@ -67,12 +74,29 @@ export async function importPredictions(raw: unknown): Promise<ImportReport> {
     };
 
     await prisma.prediction.upsert({
-      where: { matchId_model: { matchId: row.id, model: payload.model } },
-      create: { matchId: row.id, model: payload.model, ...data },
+      where: {
+        matchId_model_condition: {
+          matchId: row.id,
+          model: payload.model,
+          condition: payload.condition,
+        },
+      },
+      create: {
+        matchId: row.id,
+        model: payload.model,
+        condition: payload.condition,
+        ...data,
+      },
       update: data,
     });
     imported += 1;
   }
 
-  return { model: payload.model, total: payload.predictions.length, imported, unmatched };
+  return {
+    model: payload.model,
+    condition: payload.condition,
+    total: payload.predictions.length,
+    imported,
+    unmatched,
+  };
 }

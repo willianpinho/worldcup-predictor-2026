@@ -1,3 +1,4 @@
+import type { Condition } from "./conditions";
 import { prisma } from "./db";
 import {
   matchPoints,
@@ -54,10 +55,12 @@ export interface MatchView {
   predictions: Record<ModelId, PredView | null>;
 }
 
-export async function getMatches(): Promise<MatchView[]> {
+export async function getMatches(
+  condition: Condition = "web",
+): Promise<MatchView[]> {
   const rows = await prisma.match.findMany({
     orderBy: [{ kickoff: "asc" }, { id: "asc" }],
-    include: { predictions: true },
+    include: { predictions: { where: { condition } } },
   });
 
   return rows.map((m) => {
@@ -100,8 +103,12 @@ export interface Leaderboard {
   summary: Record<ModelId, ModelSummary>;
 }
 
-export async function getLeaderboard(): Promise<Leaderboard> {
-  const rows = await prisma.match.findMany({ include: { predictions: true } });
+export async function getLeaderboard(
+  condition: Condition = "web",
+): Promise<Leaderboard> {
+  const rows = await prisma.match.findMany({
+    include: { predictions: { where: { condition } } },
+  });
 
   const perModel = emptyByModel<ScoredPrediction[]>(() => []);
   const predicted = emptyByModel<number>(() => 0);
