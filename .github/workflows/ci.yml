@@ -4,6 +4,7 @@ on:
   push:
     branches: [master]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   quality:
@@ -39,3 +40,47 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  # Continuous deployment: rebuild the container in place on the VPS after
+  # quality passes. Runs only on pushes/merges to master (never on PRs), on the
+  # dedicated self-hosted runner on the VPS (label: worldcup). No inbound SSH and
+  # no secrets stored in GitHub — the runner owns the deploy checkout directly.
+  deploy:
+    needs: quality
+    if: >-
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+      && github.ref == 'refs/heads/master'
+    runs-on: [self-hosted, linux, x64, worldcup]
+    concurrency:
+      group: deploy-worldcup
+      cancel-in-progress: false
+    env:
+      DEPLOY_DIR: /home/willian/Developer/worldcup-predictor-2026
+      APP_CONTAINER: worldcup-predictor-2026-app-1
+    steps:
+      - name: Sync deploy checkout to master
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: |
+          git fetch --prune origin master
+          git reset --hard origin/master
+
+      - name: Rebuild and restart container
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: docker compose up -d --build app
+
+      - name: Health check
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: |
+          set -e
+          for i in $(seq 1 24); do
+            if docker exec "$APP_CONTAINER" node -e \
+              "fetch('http://localhost:3000/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"; then
+              echo "Healthy after attempt ${i}."
+              exit 0
+            fi
+            echo "Attempt ${i}/24: not ready, retrying in 5s..."
+            sleep 5
+          done
+          echo "::error::Health check failed after 120s"
+          docker compose logs --tail 50 app
+          exit 1
