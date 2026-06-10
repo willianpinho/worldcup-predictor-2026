@@ -8,14 +8,21 @@
 // e.g.
 //   import claudeKo from "../../../docs/runs/knockout-claude-2026-06-10.json";
 //   const RAW_RUNS: unknown[] = [claudeKo];
+import knockoutClaude20260610 from "../../../docs/runs/knockout-claude-2026-06-10.json";
+import knockoutGemini20260610 from "../../../docs/runs/knockout-gemini-2026-06-10.json";
+import knockoutOpenai20260610 from "../../../docs/runs/knockout-openai-2026-06-10.json";
 import {
   type KnockoutModel,
   type KnockoutRun,
   parseKnockoutRun,
 } from "./schema";
 
-// Raw static JSON imports go here. Empty until the first run is recorded.
-const RAW_RUNS: unknown[] = [];
+// Raw static JSON imports, newest first.
+const RAW_RUNS: unknown[] = [
+  knockoutClaude20260610,
+  knockoutGemini20260610,
+  knockoutOpenai20260610,
+];
 
 function load(raw: unknown): KnockoutRun {
   const result = parseKnockoutRun(raw);
