@@ -1,5 +1,21 @@
 # Prediction prompt (JSON output for import)
 
+## Arms
+
+The experiment runs three arms (`condition`) per (match, model):
+
+- **web** — chat / CLI with live web access. This document. Free sourcing.
+- **baseline** — API call, no tools, fixtures provided. Pure internal knowledge.
+- **enriched** — API call, no tools, + a standardized context block (same data for every
+  model). Reasoning over controlled data.
+
+The two API arms (baseline, enriched) are documented in
+[`PROMPT-ENRICHED.md`](./PROMPT-ENRICHED.md) and produced by `scripts/run-model.ts`. The
+second-stage knockout bracket is in [`PROMPT-KNOCKOUT.md`](./PROMPT-KNOCKOUT.md). The prompt
+below is the **web** arm.
+
+---
+
 Paste the prompt below into **Claude**, **Gemini / Antigravity** and **OpenAI** (ideally
 with web access enabled). Set `"model"` to `"claude"`, `"gemini"` or `"openai"` for each
 AI. The response is **JSON only** — paste the whole thing into `/admin` → "Import".
