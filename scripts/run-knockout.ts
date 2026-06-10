@@ -4,13 +4,16 @@
 //
 // Usage:
 //   pnpm tsx scripts/run-knockout.ts --model claude --engine "Claude Opus 4.8" \
-//     --litellm-model claude-opus-4-8 --input docs/runs/claude-baseline-2026-06-10.json
+//     --litellm-model claude-opus-4-8 --input docs/runs/claude-2026-06-09.json
+//   pnpm tsx scripts/run-knockout.ts --model gemini --engine "Gemini 3.1 Pro Preview" \
+//     --via gemini-cli --cli-model gemini-3.1-pro-preview --input docs/runs/gemini-web-2026-06-10.json
 //
-// Env: LITELLM_BASE_URL (default http://localhost:4000), LITELLM_API_KEY (required).
+// Env (litellm transport): LITELLM_BASE_URL (default http://localhost:4000), LITELLM_API_KEY.
 
 import "dotenv/config";
 import { readFileSync, writeFileSync } from "node:fs";
 import { parseKnockoutRun } from "../src/lib/knockout/schema";
+import { chatViaGeminiCli } from "./lib/geminiCli";
 import {
   chat,
   fail,
@@ -45,21 +48,18 @@ async function main(): Promise<void> {
   const engine = flags.engine;
   if (!engine || engine === "true")
     fail('--engine "<human label>" is required');
-  const litellmModel = flags["litellm-model"];
-  if (!litellmModel || litellmModel === "true")
-    fail("--litellm-model <gateway model> is required");
+  const via = flags.via || "litellm";
+  if (via !== "litellm" && via !== "gemini-cli")
+    fail("--via must be litellm or gemini-cli");
 
   const input = flags.input;
   if (!input || input === "true")
     fail("--input <group-stage run json> is required");
 
-  const baseUrl =
-    flags["base-url"] ||
-    process.env.LITELLM_BASE_URL ||
-    "http://localhost:4000";
-  const apiKey = requireEnv("LITELLM_API_KEY");
-  const temperature = flags.temperature ? Number(flags.temperature) : 0.2;
-  if (Number.isNaN(temperature)) fail("--temperature must be a number");
+  // Provider default unless explicitly set — some models reject the parameter outright.
+  const temperature = flags.temperature ? Number(flags.temperature) : undefined;
+  if (temperature !== undefined && Number.isNaN(temperature))
+    fail("--temperature must be a number");
   const maxTokens = flags["max-tokens"] ? Number(flags["max-tokens"]) : 32000;
   if (Number.isNaN(maxTokens)) fail("--max-tokens must be a number");
 
@@ -84,20 +84,50 @@ async function main(): Promise<void> {
   const inputJson = JSON.stringify(groupRun.predictions, null, 2);
   const basePrompt = `${promptDoc}\n\nINPUT — your own 72 group-stage predictions:\n${inputJson}`;
 
-  const cfg: GatewayConfig = {
-    baseUrl,
-    model: litellmModel,
-    apiKey,
-    temperature,
-    maxTokens,
-  };
-  console.log(
-    `Running knockout ${model} via ${litellmModel} @ ${baseUrl} (temp ${temperature}, max_tokens ${maxTokens})`,
-  );
+  let send: (
+    p: string,
+  ) => Promise<{ content: string; totalTokens?: number; toolCalls?: number }>;
+  if (via === "gemini-cli") {
+    const cliModel = flags["cli-model"];
+    if (!cliModel || cliModel === "true")
+      fail("--cli-model <gemini model id> is required with --via gemini-cli");
+    send = async (p) => chatViaGeminiCli(cliModel, p);
+    console.log(`Running knockout ${model} via gemini CLI (${cliModel})`);
+  } else {
+    const litellmModel = flags["litellm-model"];
+    if (!litellmModel || litellmModel === "true")
+      fail("--litellm-model <gateway model> is required");
+    const baseUrl =
+      flags["base-url"] ||
+      process.env.LITELLM_BASE_URL ||
+      "http://localhost:4000";
+    const apiKey = requireEnv("LITELLM_API_KEY");
+    const cfg: GatewayConfig = {
+      baseUrl,
+      model: litellmModel,
+      apiKey,
+      temperature,
+      maxTokens,
+    };
+    send = (p) => chat(cfg, p);
+    console.log(
+      `Running knockout ${model} via ${litellmModel} @ ${baseUrl} (temp ${temperature ?? "provider default"}, max_tokens ${maxTokens})`,
+    );
+  }
 
   let prompt = basePrompt;
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    const { content, totalTokens } = await chat(cfg, prompt);
+    const { content, totalTokens, toolCalls } = await send(prompt);
+    if (via === "gemini-cli" && (toolCalls ?? 0) > 0) {
+      if (attempt === MAX_RETRIES)
+        fail(
+          `Transport used ${toolCalls} tool call(s) on every attempt — no-tools run violated`,
+        );
+      console.log(
+        `  attempt ${attempt}: used ${toolCalls} tool call(s), retrying`,
+      );
+      continue;
+    }
     let parsed: unknown;
     try {
       parsed = parseJson(content);
@@ -134,7 +164,11 @@ async function main(): Promise<void> {
     console.log(
       `  attempt ${attempt}: ${result.errors.length} validation issue(s), retrying`,
     );
-    prompt = `${basePrompt}\n\nYour previous reply had these problems. Fix them and reply with JSON only:\n- ${result.errors.join("\n- ")}`;
+    // Cap the feedback — hundreds of issues bloat the prompt and derail the model.
+    const top = result.errors.slice(0, 25);
+    prompt = `${basePrompt}\n\nYour previous reply had these problems${
+      result.errors.length > top.length ? ` (first ${top.length} shown)` : ""
+    }. Fix them and reply with JSON only:\n- ${top.join("\n- ")}`;
   }
 }
 

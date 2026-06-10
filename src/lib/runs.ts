@@ -3,8 +3,16 @@
 // input prompt and the model's output live side by side. Add a model's run by dropping a
 // JSON file in docs/runs/ and importing it here.
 import claude20260609 from "../../docs/runs/claude-2026-06-09.json";
-import gemini20260609 from "../../docs/runs/gemini-2026-06-09.json";
+import claudeBaseline20260610 from "../../docs/runs/claude-baseline-2026-06-10.json";
+import claudeEnriched20260610 from "../../docs/runs/claude-enriched-2026-06-10.json";
+import geminiBaseline20260610 from "../../docs/runs/gemini-baseline-2026-06-10.json";
+import geminiEnriched20260610 from "../../docs/runs/gemini-enriched-2026-06-10.json";
+// gemini-2026-06-09.json (Gemini 3 Pro) was superseded by the 3.1 Pro re-run below and is
+// kept on disk as a historical artifact only.
+import geminiWeb20260610 from "../../docs/runs/gemini-web-2026-06-10.json";
 import openai20260609 from "../../docs/runs/openai-2026-06-09.json";
+import openaiBaseline20260610 from "../../docs/runs/openai-baseline-2026-06-10.json";
+import openaiEnriched20260610 from "../../docs/runs/openai-enriched-2026-06-10.json";
 import type { Condition } from "./conditions";
 import type { ImportPayload } from "./importPredictions";
 
@@ -26,11 +34,17 @@ interface RawRun extends Omit<ModelRun, "condition"> {
   prompt?: string;
 }
 
-// Newest first.
+// Grouped by arm (web, baseline, enriched), newest first within each.
 const RAW_RUNS: RawRun[] = [
+  geminiWeb20260610 as RawRun,
   claude20260609 as RawRun,
   openai20260609 as RawRun,
-  gemini20260609 as RawRun,
+  claudeBaseline20260610 as RawRun,
+  openaiBaseline20260610 as RawRun,
+  geminiBaseline20260610 as RawRun,
+  claudeEnriched20260610 as RawRun,
+  openaiEnriched20260610 as RawRun,
+  geminiEnriched20260610 as RawRun,
 ];
 
 export const MODEL_RUNS: ModelRun[] = RAW_RUNS.map((r) => ({

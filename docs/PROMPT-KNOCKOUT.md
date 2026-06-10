@@ -66,13 +66,16 @@ The JSON must match this shape (validated by Zod):
 - `scoreA`/`scoreB` are the score **after extra time** (the full result). When the tie is drawn
   and goes to penalties, set `decidedBy: "penalties"`, keep `scoreA === scoreB`, and add
   `pensA`/`pensB` (distinct integers).
-- `decidedBy` ∈ {`regulation`, `extra-time`, `penalties`}. `winner` must be `teamA` or `teamB`.
+- `decidedBy` ∈ {`regulation`, `extra-time`, `penalties`}. `winner` is the winning team's
+  **name** (e.g. `"Spain"`), matching `teamA` or `teamB` of that match. (Literal
+  `"teamA"`/`"teamB"` side keywords are tolerated and resolved on import.)
 - Team names may be in any language/order — the app normalizes them.
 
-The app validates internal consistency: winners match scores/penalties, each round feeds the
-next (bracket adjacency), the third-place match is the two semi-final losers, and the champion
-is the final's winner. The **bracket structure itself** (who meets whom) is the model's own
-claim — reproducing the official 2026 format is part of the experiment.
+The app validates internal consistency: winners match scores/penalties, every team in a round
+must have won a match in the previous round, the third-place match is the two semi-final
+losers, and the champion is the final's winner. The **bracket structure itself** (who meets
+whom) is the model's own claim — reproducing the official 2026 format is part of the
+experiment.
 
 ---
 
@@ -132,7 +135,7 @@ RESPOND WITH VALID JSON ONLY, no text before or after, in exactly this shape:
   },
   "rounds": {
     "roundOf32": [
-      { "slot": "R32-1", "teamA": "<team>", "teamB": "<team>", "scoreA": <int>, "scoreB": <int>, "decidedBy": "regulation|extra-time|penalties", "pensA": <int>, "pensB": <int>, "winner": "<teamA|teamB>", "reasoning": "<one sentence>" }
+      { "slot": "R32-1", "teamA": "<team>", "teamB": "<team>", "scoreA": <int>, "scoreB": <int>, "decidedBy": "regulation|extra-time|penalties", "pensA": <int>, "pensB": <int>, "winner": "<name of the winning team>", "reasoning": "<one sentence>" }
     ],
     "roundOf16": [ ...8 ties (R16-1..R16-8)... ],
     "quarterfinals": [ ...4 ties (QF-1..QF-4)... ],

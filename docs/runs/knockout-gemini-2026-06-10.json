@@ -1,0 +1,386 @@
+{
+  "model": "gemini",
+  "generatedAt": "2026-06-10T21:16:50.831Z",
+  "engine": "Google Gemini 3.1 Pro Preview (Gemini CLI, OAuth)",
+  "notes": "Calculated standings perfectly aligned with official tiebreakers (Algeria edges Ghana for the final 3rd place spot on Goals Scored, 3 vs 2). Bracket mapped 1st vs 3rd and remaining 2nd vs 2nd accurately.",
+  "qualification": {
+    "groupWinners": {
+      "A": "Mexico",
+      "B": "Switzerland",
+      "C": "Brazil",
+      "D": "USA",
+      "E": "Germany",
+      "F": "Netherlands",
+      "G": "Belgium",
+      "H": "Spain",
+      "I": "France",
+      "J": "Argentina",
+      "K": "Portugal",
+      "L": "England"
+    },
+    "runnersUp": {
+      "A": "Czech Republic",
+      "B": "Canada",
+      "C": "Morocco",
+      "D": "Turkey",
+      "E": "Ivory Coast",
+      "F": "Japan",
+      "G": "Egypt",
+      "H": "Uruguay",
+      "I": "Norway",
+      "J": "Austria",
+      "K": "Colombia",
+      "L": "Croatia"
+    },
+    "thirdPlaceAdvancing": [
+      "South Korea",
+      "Ecuador",
+      "Scotland",
+      "Paraguay",
+      "Senegal",
+      "Sweden",
+      "Iran",
+      "Algeria"
+    ]
+  },
+  "rounds": {
+    "roundOf32": [
+      {
+        "slot": "R32-1",
+        "teamA": "Mexico",
+        "teamB": "Scotland",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Mexico",
+        "reasoning": "Home advantage at the Azteca and dynamic wing play overcome Scotland's physical grit."
+      },
+      {
+        "slot": "R32-2",
+        "teamA": "Canada",
+        "teamB": "Ivory Coast",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Canada",
+        "reasoning": "Explosive pace from Davies and David catches the Ivorian defense out in transition."
+      },
+      {
+        "slot": "R32-3",
+        "teamA": "Brazil",
+        "teamB": "South Korea",
+        "scoreA": 3,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Brazil",
+        "reasoning": "Brazil's overwhelming attacking talent easily breaks down the Korean high line."
+      },
+      {
+        "slot": "R32-4",
+        "teamA": "Netherlands",
+        "teamB": "Morocco",
+        "scoreA": 1,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Netherlands",
+        "reasoning": "A tight tactical battle is settled by a decisive set-piece from the Dutch."
+      },
+      {
+        "slot": "R32-5",
+        "teamA": "Germany",
+        "teamB": "Paraguay",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Germany",
+        "reasoning": "Sustained German pressure and ball circulation inevitably breach Paraguay's low block."
+      },
+      {
+        "slot": "R32-6",
+        "teamA": "Czech Republic",
+        "teamB": "Turkey",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "extra-time",
+        "winner": "Turkey",
+        "reasoning": "Turkey's creative midfielders find a breakthrough in the extra period of a gritty European clash."
+      },
+      {
+        "slot": "R32-7",
+        "teamA": "USA",
+        "teamB": "Sweden",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "USA",
+        "reasoning": "Home crowd energy and athleticism power the US past a tall and physical Swedish team."
+      },
+      {
+        "slot": "R32-8",
+        "teamA": "Switzerland",
+        "teamB": "Ecuador",
+        "scoreA": 0,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Ecuador",
+        "reasoning": "Ecuador's intense physicality and pressing disrupt the Swiss passing rhythms for a narrow upset."
+      },
+      {
+        "slot": "R32-9",
+        "teamA": "Belgium",
+        "teamB": "Senegal",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Belgium",
+        "reasoning": "De Bruyne's playmaking orchestrates a narrow victory against a resilient Senegalese side."
+      },
+      {
+        "slot": "R32-10",
+        "teamA": "Norway",
+        "teamB": "Austria",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Austria",
+        "reasoning": "Rangnick's relentless pressing system stifles the midfield service to Erling Haaland."
+      },
+      {
+        "slot": "R32-11",
+        "teamA": "Spain",
+        "teamB": "Algeria",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Spain",
+        "reasoning": "Total control of possession completely suffocates Algeria's counter-attacking hopes."
+      },
+      {
+        "slot": "R32-12",
+        "teamA": "Portugal",
+        "teamB": "Croatia",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Portugal",
+        "reasoning": "Portugal's depth in attack overwhelms an aging Croatian midfield in the late stages."
+      },
+      {
+        "slot": "R32-13",
+        "teamA": "Argentina",
+        "teamB": "Iran",
+        "scoreA": 3,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Argentina",
+        "reasoning": "Messi and Alvarez comfortably dissect Iran's deep defensive structure."
+      },
+      {
+        "slot": "R32-14",
+        "teamA": "Egypt",
+        "teamB": "Uruguay",
+        "scoreA": 0,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Uruguay",
+        "reasoning": "Bielsa's relentless pressing proves too intense for Egypt's attempts to build from the back."
+      },
+      {
+        "slot": "R32-15",
+        "teamA": "France",
+        "teamB": "Colombia",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "extra-time",
+        "winner": "France",
+        "reasoning": "Mbappe seals it late after Colombia puts up a heroic and bruising physical fight."
+      },
+      {
+        "slot": "R32-16",
+        "teamA": "England",
+        "teamB": "Japan",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "England",
+        "reasoning": "England's pragmatic structure neutralizes Japan's swift transitions out wide."
+      }
+    ],
+    "roundOf16": [
+      {
+        "slot": "R16-1",
+        "teamA": "Mexico",
+        "teamB": "Canada",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Mexico",
+        "reasoning": "An intense CONCACAF rivalry, but Mexico's home-soil aura and technical edge prevail."
+      },
+      {
+        "slot": "R16-2",
+        "teamA": "Brazil",
+        "teamB": "Netherlands",
+        "scoreA": 2,
+        "scoreB": 2,
+        "decidedBy": "penalties",
+        "pensA": 5,
+        "pensB": 4,
+        "winner": "Brazil",
+        "reasoning": "A thrilling end-to-end clash where Alisson steps up as the hero in the shootout."
+      },
+      {
+        "slot": "R16-3",
+        "teamA": "Germany",
+        "teamB": "Turkey",
+        "scoreA": 3,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Germany",
+        "reasoning": "Musiala and Wirtz exploit the vast spaces left by Turkey's aggressive midfield push."
+      },
+      {
+        "slot": "R16-4",
+        "teamA": "USA",
+        "teamB": "Ecuador",
+        "scoreA": 1,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "USA",
+        "reasoning": "A gritty, tightly contested battle decided by a late transition goal in front of a raucous home crowd."
+      },
+      {
+        "slot": "R16-5",
+        "teamA": "Belgium",
+        "teamB": "Austria",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "extra-time",
+        "winner": "Austria",
+        "reasoning": "Austria's relentless counter-pressing forces critical errors from an aging Belgian defense."
+      },
+      {
+        "slot": "R16-6",
+        "teamA": "Spain",
+        "teamB": "Portugal",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 3,
+        "pensB": 4,
+        "winner": "Portugal",
+        "reasoning": "A tense Iberian derby where Portugal's depth off the bench gives them the mental edge in the shootout."
+      },
+      {
+        "slot": "R16-7",
+        "teamA": "Argentina",
+        "teamB": "Uruguay",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Argentina",
+        "reasoning": "A classic Rio de la Plata battle won by Argentina's superior midfield ball retention."
+      },
+      {
+        "slot": "R16-8",
+        "teamA": "France",
+        "teamB": "England",
+        "scoreA": 1,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "France",
+        "reasoning": "A tense tactical affair settled by a moment of individual brilliance from Kylian Mbappe."
+      }
+    ],
+    "quarterfinals": [
+      {
+        "slot": "QF-1",
+        "teamA": "Mexico",
+        "teamB": "Brazil",
+        "scoreA": 1,
+        "scoreB": 3,
+        "decidedBy": "regulation",
+        "winner": "Brazil",
+        "reasoning": "Brazil's elite forward line overwhelms Mexico's defense, silencing the hostile Azteca crowd."
+      },
+      {
+        "slot": "QF-2",
+        "teamA": "Germany",
+        "teamB": "USA",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Germany",
+        "reasoning": "Germany's tactical maturity and tempo control finally end the host nation's dream run."
+      },
+      {
+        "slot": "QF-3",
+        "teamA": "Austria",
+        "teamB": "Portugal",
+        "scoreA": 0,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Portugal",
+        "reasoning": "Portugal bypasses Austria's press with elite ball circulation and clinical finishing."
+      },
+      {
+        "slot": "QF-4",
+        "teamA": "Argentina",
+        "teamB": "France",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "extra-time",
+        "winner": "France",
+        "reasoning": "A rematch of the 2022 final swings to France due to superior bench depth and athleticism in extra time."
+      }
+    ],
+    "semifinals": [
+      {
+        "slot": "SF-1",
+        "teamA": "Brazil",
+        "teamB": "Germany",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Brazil",
+        "reasoning": "Vinicius Jr. shines as Brazil exorcises the ghosts of 2014 with a dynamic attacking display."
+      },
+      {
+        "slot": "SF-2",
+        "teamA": "Portugal",
+        "teamB": "France",
+        "scoreA": 0,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "France",
+        "reasoning": "A defensive masterclass from the French backline sets up a narrow, opportunistic progression."
+      }
+    ],
+    "thirdPlace": {
+      "slot": "TP",
+      "teamA": "Germany",
+      "teamB": "Portugal",
+      "scoreA": 3,
+      "scoreB": 2,
+      "decidedBy": "regulation",
+      "winner": "Germany",
+      "reasoning": "An open, attacking consolation game where Germany's young core outshines Portugal's veterans."
+    },
+    "final": {
+      "slot": "F",
+      "teamA": "Brazil",
+      "teamB": "France",
+      "scoreA": 2,
+      "scoreB": 1,
+      "decidedBy": "regulation",
+      "winner": "Brazil",
+      "reasoning": "In a battle of modern titans, Brazil's fluid attacking rotations finally unlock the resilient French defense to claim their sixth star."
+    }
+  },
+  "champion": "Brazil",
+  "goldenBoot": {
+    "player": "Kylian Mbappe",
+    "team": "France",
+    "goals": 7
+  }
+}
