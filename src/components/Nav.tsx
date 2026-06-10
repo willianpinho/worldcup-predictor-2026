@@ -4,6 +4,7 @@ import { FaFutbol } from "react-icons/fa6";
 const links = [
   { href: "/", label: "Leaderboard" },
   { href: "/matches", label: "Matches" },
+  { href: "/standings", label: "Standings" },
   { href: "/prompt", label: "Prompt" },
 ];
 
