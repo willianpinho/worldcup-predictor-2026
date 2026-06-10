@@ -105,25 +105,27 @@ export default function PromptPage() {
                 key={`${run.model}-${run.condition}-${run.generatedAt}`}
                 className="overflow-hidden rounded-2xl border border-border bg-surface"
               >
-                <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-2">
-                  <div className="flex items-center gap-2 text-xs">
+                <div className="flex items-start justify-between gap-3 border-b border-border px-4 py-2">
+                  {/* Wraps + truncates: engine labels are long and must not push the
+                      card past narrow viewports. */}
+                  <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs">
                     <span className="rounded-md bg-surface-2 px-2 py-0.5 font-medium text-foreground">
                       {MODEL_LABEL[run.model] ?? run.model}
                     </span>
                     <span className="rounded-md bg-accent/15 px-2 py-0.5 font-medium text-accent">
                       {CONDITION_META[run.condition].label}
                     </span>
-                    <span className="text-muted">{run.engine}</span>
-                    <span className="text-muted">·</span>
-                    <span className="text-muted">
-                      {formatRunTimestamp(run.generatedAt)}
+                    <span className="max-w-full truncate text-muted">
+                      {run.engine}
                     </span>
-                    <span className="text-muted">·</span>
                     <span className="text-muted">
+                      {formatRunTimestamp(run.generatedAt)} ·{" "}
                       {run.predictions.length} matches
                     </span>
                   </div>
-                  <CopyButton text={json} />
+                  <span className="shrink-0">
+                    <CopyButton text={json} />
+                  </span>
                 </div>
                 <details>
                   <summary className="cursor-pointer px-4 py-2 text-xs text-muted transition-colors hover:text-foreground">

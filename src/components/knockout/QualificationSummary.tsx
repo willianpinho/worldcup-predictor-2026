@@ -19,9 +19,12 @@ const GROUPS = [
 function TeamChip({ team }: { team: string }) {
   const code = flagCode(team);
   return (
-    <span className="inline-flex items-center gap-1.5">
+    <span className="inline-flex min-w-0 max-w-full items-center gap-1.5">
       {code && (
-        <span className={`fi fi-${code} size-3 rounded-[2px]`} aria-hidden />
+        <span
+          className={`fi fi-${code} size-3 shrink-0 rounded-[2px]`}
+          aria-hidden
+        />
       )}
       <span className="truncate">{team}</span>
     </span>
@@ -55,7 +58,7 @@ export function QualificationSummary({
               >
                 <span className="font-mono text-accent">{g}</span>
                 <TeamChip team={groupWinners[g]} />
-                <span className="text-muted">
+                <span className="flex min-w-0 text-muted">
                   <TeamChip team={runnersUp[g]} />
                 </span>
               </li>
