@@ -36,13 +36,14 @@ model Match {
   @@index([kickoff])
 }
 
-/// One AI's prediction for a match. Unique per (match, model).
+/// One AI's prediction for a match. Unique per (match, model, condition).
 model Prediction {
   id      Int   @id @default(autoincrement())
   matchId Int
   match   Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
 
   model      String // 'claude' | 'gemini'
+  condition  String  @default("web") // experiment arm: 'web' | 'baseline' | 'enriched'
   predA      Int
   predB      Int
   probWinA   Float? // 0..100
@@ -54,5 +55,5 @@ model Prediction {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([matchId, model])
+  @@unique([matchId, model, condition])
 }
