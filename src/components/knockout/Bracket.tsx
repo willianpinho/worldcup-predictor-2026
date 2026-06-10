@@ -8,7 +8,7 @@ interface Column {
 
 function BracketColumn({ title, matches }: Column) {
   return (
-    <div className="flex shrink-0 flex-col">
+    <div className="flex shrink-0 snap-start flex-col">
       <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted">
         {title}
       </h3>
@@ -34,11 +34,16 @@ export function Bracket({ run }: { run: KnockoutRun }) {
   ];
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border bg-surface/40 p-4">
-      <div className="flex min-w-max gap-6">
-        {columns.map((c) => (
-          <BracketColumn key={c.title} title={c.title} matches={c.matches} />
-        ))}
+    <div>
+      <p className="mb-1.5 text-right text-[11px] text-muted sm:hidden">
+        swipe to follow the bracket →
+      </p>
+      <div className="snap-x snap-mandatory overflow-x-auto rounded-2xl border border-border bg-surface/40 p-4 sm:snap-none">
+        <div className="flex min-w-max gap-6">
+          {columns.map((c) => (
+            <BracketColumn key={c.title} title={c.title} matches={c.matches} />
+          ))}
+        </div>
       </div>
     </div>
   );

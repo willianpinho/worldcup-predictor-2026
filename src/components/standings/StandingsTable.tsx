@@ -34,7 +34,7 @@ function Cell({
 }) {
   return (
     <td
-      className={`px-1 py-1.5 text-center font-mono text-xs tabular-nums ${
+      className={`px-0.5 py-1.5 text-center font-mono text-xs tabular-nums sm:px-1 ${
         strong ? "font-semibold text-foreground" : "text-muted"
       }`}
     >
@@ -60,16 +60,16 @@ export function StandingsTable({
       <table className="w-full border-collapse">
         <thead>
           <tr className="text-[10px] uppercase tracking-wide text-muted">
-            <th className="px-1 py-1 text-left font-medium">#</th>
-            <th className="px-1 py-1 text-left font-medium">Team</th>
-            <th className="px-1 py-1 text-center font-medium">P</th>
-            <th className="px-1 py-1 text-center font-medium">W</th>
-            <th className="px-1 py-1 text-center font-medium">D</th>
-            <th className="px-1 py-1 text-center font-medium">L</th>
-            <th className="px-1 py-1 text-center font-medium">GF</th>
-            <th className="px-1 py-1 text-center font-medium">GA</th>
-            <th className="px-1 py-1 text-center font-medium">GD</th>
-            <th className="px-1 py-1 text-center font-medium">Pts</th>
+            <th className="px-0.5 py-1 text-left font-medium sm:px-1">#</th>
+            <th className="px-0.5 py-1 text-left font-medium sm:px-1">Team</th>
+            <th className="px-0.5 py-1 text-center font-medium sm:px-1">P</th>
+            <th className="px-0.5 py-1 text-center font-medium sm:px-1">W</th>
+            <th className="px-0.5 py-1 text-center font-medium sm:px-1">D</th>
+            <th className="px-0.5 py-1 text-center font-medium sm:px-1">L</th>
+            <th className="px-0.5 py-1 text-center font-medium sm:px-1">GF</th>
+            <th className="px-0.5 py-1 text-center font-medium sm:px-1">GA</th>
+            <th className="px-0.5 py-1 text-center font-medium sm:px-1">GD</th>
+            <th className="px-0.5 py-1 text-center font-medium sm:px-1">Pts</th>
           </tr>
         </thead>
         <tbody>
@@ -80,10 +80,10 @@ export function StandingsTable({
                 key={r.team}
                 className={`border-l-2 ${ROW_TINT[qual]} border-t border-border/40`}
               >
-                <td className="px-1 py-1.5 text-center font-mono text-xs text-muted">
+                <td className="px-0.5 py-1.5 text-center font-mono text-xs text-muted sm:px-1">
                   {i + 1}
                 </td>
-                <td className="px-1 py-1.5">
+                <td className="max-w-0 px-0.5 py-1.5 sm:px-1">
                   <span className="flex min-w-0 items-center gap-1.5">
                     <Flag team={r.team} />
                     <span className="truncate text-xs font-medium">

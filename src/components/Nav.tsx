@@ -19,12 +19,13 @@ export function Nav() {
             WC Predictor <span className="text-accent">2026</span>
           </span>
         </Link>
-        <ul className="flex items-center gap-1 text-sm">
+        {/* Wraps on narrow screens — five links exceed a 390px viewport on one row. */}
+        <ul className="flex max-w-full flex-wrap items-center justify-center gap-1 text-[13px] sm:text-sm">
           {links.map((l) => (
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="rounded-md px-3 py-1.5 text-muted transition-colors hover:bg-surface-2 hover:text-foreground"
+                className="inline-flex min-h-10 items-center rounded-md px-2.5 py-1.5 text-muted transition-colors hover:bg-surface-2 hover:text-foreground sm:px-3"
               >
                 {l.label}
               </Link>
