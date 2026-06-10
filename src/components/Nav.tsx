@@ -5,13 +5,12 @@ const links = [
   { href: "/", label: "Leaderboard" },
   { href: "/matches", label: "Matches" },
   { href: "/prompt", label: "Prompt" },
-  { href: "/admin", label: "Admin" },
 ];
 
 export function Nav() {
   return (
     <header className="border-b border-border bg-surface/60 backdrop-blur">
-      <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4">
+      <nav className="mx-auto flex w-full max-w-5xl flex-col items-center gap-3 px-4 py-3 sm:flex-row sm:justify-between sm:gap-4 sm:py-4">
         <Link href="/" className="flex items-center gap-2 font-semibold">
           <FaFutbol className="text-accent" aria-hidden />
           <span>

@@ -81,7 +81,7 @@ function MatchCard({ m }: { m: MatchView }) {
             </span>
           )}
         </div>
-        <div className="flex shrink-0 gap-5 sm:flex-col sm:gap-1">
+        <div className="flex shrink-0 flex-wrap gap-x-4 gap-y-1.5 sm:flex-col sm:gap-1">
           {MODELS.map((model) => (
             <PredCell key={model} model={model} pred={m.predictions[model]} />
           ))}
