@@ -3,7 +3,8 @@ import {
   fetchFixturesForResults,
   resultsProviderName,
 } from "./providers/index";
-import { normalizeTeam, pairKey } from "./teams";
+import { groupUpdate, knockoutUpdate } from "./sync-match";
+import { pairKey } from "./teams";
 
 export interface SyncReport {
   provider: string;
@@ -15,48 +16,69 @@ export interface SyncReport {
 
 /**
  * Pull current scores from the active provider and update local matches.
- * Matches are aligned by team pair (group/order-independent); scores are
- * re-oriented to the stored teamA/teamB before saving.
+ *
+ * Group fixtures are aligned to GROUP rows by team pair (order-independent) and
+ * scores re-oriented to the stored teamA/teamB. Knockout fixtures are aligned by
+ * official match number (extId "wc-ko-<num>") — pairKey is unusable there because
+ * placeholder codes aren't teams and a KO rematch of a group pairing would collide.
+ * This is the mechanism that progressively fills the blank "Actual" bracket.
  */
 export async function syncResults(): Promise<SyncReport> {
   const fixtures = await fetchFixturesForResults();
-  const scored = fixtures.filter(
-    (f) =>
-      (f.status === "FINISHED" || f.status === "LIVE") &&
-      f.scoreA !== null &&
-      f.scoreB !== null,
-  );
 
   const rows = await prisma.match.findMany();
-  const byPair = new Map(rows.map((m) => [pairKey(m.teamA, m.teamB), m]));
+  // Group matching is scoped to GROUP rows so KO rematches can't collide on pairKey.
+  const byPair = new Map(
+    rows
+      .filter((m) => m.stage === "GROUP")
+      .map((m) => [pairKey(m.teamA, m.teamB), m]),
+  );
+  const byMatchNum = new Map(
+    rows.filter((m) => m.matchNum !== null).map((m) => [m.matchNum, m]),
+  );
 
   let updated = 0;
   const unmatched: string[] = [];
+  let withScores = 0;
 
-  for (const f of scored) {
-    const row = byPair.get(pairKey(f.teamA, f.teamB));
+  for (const f of fixtures) {
+    if (f.stage === "GROUP") {
+      const hasScore = f.scoreA !== null && f.scoreB !== null;
+      const isResult =
+        (f.status === "FINISHED" || f.status === "LIVE") && hasScore;
+      if (!isResult) continue;
+      withScores += 1;
+
+      const row = byPair.get(pairKey(f.teamA, f.teamB));
+      if (!row) {
+        unmatched.push(`${f.teamA} x ${f.teamB}`);
+        continue;
+      }
+      const data = groupUpdate(f, row);
+      if (!data) continue;
+      await prisma.match.update({ where: { id: row.id }, data });
+      updated += 1;
+      continue;
+    }
+
+    // Knockout: match by official number; update teams (codes → names), schedule,
+    // status, scores, and penalties whenever any of them changed.
+    if (f.scoreA !== null && f.scoreB !== null) withScores += 1;
+    const row = f.matchNum !== null ? byMatchNum.get(f.matchNum) : undefined;
     if (!row) {
-      unmatched.push(`${f.teamA} x ${f.teamB}`);
+      unmatched.push(`#${f.matchNum} ${f.teamA} x ${f.teamB}`);
       continue;
     }
-    const swap = normalizeTeam(f.teamA) === normalizeTeam(row.teamB);
-    const scoreA = swap ? f.scoreB : f.scoreA;
-    const scoreB = swap ? f.scoreA : f.scoreB;
-
-    if (row.scoreA === scoreA && row.scoreB === scoreB && row.status === f.status) {
-      continue;
-    }
-    await prisma.match.update({
-      where: { id: row.id },
-      data: { scoreA, scoreB, status: f.status },
-    });
+    const data = knockoutUpdate(f, row);
+    if (!data) continue;
+    await prisma.match.update({ where: { id: row.id }, data });
     updated += 1;
   }
 
   return {
     provider: resultsProviderName(),
     fetched: fixtures.length,
-    withScores: scored.length,
+    withScores,
     updated,
     unmatched,
   };
