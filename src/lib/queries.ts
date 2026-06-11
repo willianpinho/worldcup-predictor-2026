@@ -58,7 +58,9 @@ export interface MatchView {
 export async function getMatches(
   condition: Condition = "web",
 ): Promise<MatchView[]> {
+  // Group stage only: keeps the 72-match progress bar + standings views correct.
   const rows = await prisma.match.findMany({
+    where: { stage: "GROUP" },
     orderBy: [{ kickoff: "asc" }, { id: "asc" }],
     include: { predictions: { where: { condition } } },
   });
@@ -107,6 +109,7 @@ export async function getLeaderboard(
   condition: Condition = "web",
 ): Promise<Leaderboard> {
   const rows = await prisma.match.findMany({
+    where: { stage: "GROUP" },
     include: { predictions: { where: { condition } } },
   });
 

@@ -44,7 +44,9 @@ export interface ImportReport {
 export async function importPredictions(raw: unknown): Promise<ImportReport> {
   const payload = ImportSchema.parse(raw);
 
-  const rows = await prisma.match.findMany();
+  // Predictions are for the 72 group games only — scope the pair map to GROUP rows
+  // so a knockout placeholder pairing can never shadow a real group fixture.
+  const rows = await prisma.match.findMany({ where: { stage: "GROUP" } });
   const byPair = new Map(rows.map((m) => [pairKey(m.teamA, m.teamB), m]));
 
   const unmatched: string[] = [];

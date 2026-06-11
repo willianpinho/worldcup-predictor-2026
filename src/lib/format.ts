@@ -27,6 +27,24 @@ export function formatRunTimestamp(iso: string): string {
   return `${RUN_FMT.format(new Date(iso))} UTC`;
 }
 
+const SHORT_DAY_FMT = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric",
+  month: "short",
+  timeZone: "UTC",
+});
+
+/** Compact kickoff date for bracket cells, day-first, e.g. "28 Jun" (UTC). */
+export function formatShortDate(date: Date): string {
+  return SHORT_DAY_FMT.format(date);
+}
+
+/** Primary city from an openfootball ground, e.g. "Los Angeles (Inglewood)" -> "Los Angeles". */
+export function cityLabel(ground: string | null): string | null {
+  if (!ground) return null;
+  const paren = ground.indexOf(" (");
+  return (paren === -1 ? ground : ground.slice(0, paren)).trim() || null;
+}
+
 /** Tailwind classes for a points badge by tier. */
 export function pointsBadgeClass(points: number | null): string {
   if (points === null) return "bg-surface-2 text-muted";
