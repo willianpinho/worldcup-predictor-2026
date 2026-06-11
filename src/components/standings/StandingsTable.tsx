@@ -5,17 +5,28 @@ import type { StandingRow } from "@/lib/standings";
 // resolved at the page level (team names that currently hold a best-8 third spot).
 export type Qualification = "advance" | "playoff" | "out";
 
-function Flag({ team }: { team: string }) {
+// Flag-only team identity: the country name lives in the native tooltip (hover /
+// long-press) and in an sr-only span for screen readers — full names broke the
+// compact 10-column table on narrow screens.
+function TeamFlag({ team }: { team: string }) {
   const code = flagCode(team);
-  if (!code)
-    return (
-      <span
-        className="h-3 w-4 shrink-0 rounded-[2px] bg-surface-2"
-        aria-hidden
-      />
-    );
   return (
-    <span className={`fi fi-${code} shrink-0 rounded-[2px]`} aria-hidden />
+    <span title={team} className="inline-flex items-center">
+      {code ? (
+        <span
+          className={`fi fi-${code} shrink-0 rounded-[2px] text-base`}
+          aria-hidden
+        />
+      ) : (
+        <span
+          className="inline-flex h-4 w-[1.4rem] shrink-0 items-center justify-center rounded-[2px] bg-surface-2 text-[8px] font-semibold uppercase text-muted"
+          aria-hidden
+        >
+          {team.slice(0, 3)}
+        </span>
+      )}
+      <span className="sr-only">{team}</span>
+    </span>
   );
 }
 
@@ -83,13 +94,8 @@ export function StandingsTable({
                 <td className="px-0.5 py-1.5 text-center font-mono text-xs text-muted sm:px-1">
                   {i + 1}
                 </td>
-                <td className="max-w-0 px-0.5 py-1.5 sm:px-1">
-                  <span className="flex min-w-0 items-center gap-1.5">
-                    <Flag team={r.team} />
-                    <span className="truncate text-xs font-medium">
-                      {r.team}
-                    </span>
-                  </span>
+                <td className="px-0.5 py-1.5 sm:px-1">
+                  <TeamFlag team={r.team} />
                 </td>
                 <Cell>{r.played}</Cell>
                 <Cell>{r.won}</Cell>
