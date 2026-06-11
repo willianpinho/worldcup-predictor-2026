@@ -121,18 +121,6 @@ Run files land in `docs/runs/` and are registered in `src/lib/runs.ts` /
 - **Standardized context:** see [`docs/context/README.md`](docs/context/README.md)
   (sources + snapshot dates).
 
-## Deploy (VPS + Traefik + Cloudflare)
-
-Subdomain `worldcup2026.willianpinho.com`, TLS via origin cert (no certresolver).
-Secrets via 1Password:
-
-```bash
-op run --env-file=.env.template -- docker compose up -d --build
-```
-
-SQLite persists in the `wc_db` volume (`/app/data`). A cron sidecar calls
-`/api/results/sync` every 30 minutes.
-
 ---
 
 An independent project by [Willian Pinho](https://willianpinho.com) — not affiliated
