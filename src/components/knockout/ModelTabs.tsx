@@ -1,34 +1,32 @@
 import Link from "next/link";
-import { MODELS, type KnockoutModel } from "@/lib/knockout/schema";
+import type { KnockoutView } from "@/lib/knockout/view";
 
-const LABEL: Record<KnockoutModel, string> = {
-  claude: "Claude",
-  gemini: "Gemini",
-  openai: "OpenAI",
-};
-const ACTIVE: Record<KnockoutModel, string> = {
-  claude: "border-claude text-claude",
-  gemini: "border-gemini text-gemini",
-  openai: "border-openai text-openai",
-};
+const TABS: Array<{ view: KnockoutView; label: string; active: string }> = [
+  { view: "actual", label: "Actual", active: "border-accent text-accent" },
+  { view: "claude", label: "Claude", active: "border-claude text-claude" },
+  { view: "gemini", label: "Gemini", active: "border-gemini text-gemini" },
+  { view: "openai", label: "OpenAI", active: "border-openai text-openai" },
+];
 
-/** Tab links that set ?model=… — pure navigation, no client JS. */
-export function ModelTabs({ active }: { active: KnockoutModel }) {
+/** Tab links that set ?model=… — pure navigation, no client JS. Default is "actual". */
+export function ModelTabs({ active }: { active: KnockoutView }) {
   return (
     <nav className="flex gap-1 border-b border-border">
-      {MODELS.map((m) => {
-        const isActive = m === active;
+      {TABS.map((t) => {
+        const isActive = t.view === active;
+        const href =
+          t.view === "actual" ? "/knockout" : `/knockout?model=${t.view}`;
         return (
           <Link
-            key={m}
-            href={`/knockout?model=${m}`}
+            key={t.view}
+            href={href}
             className={`-mb-px border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
               isActive
-                ? ACTIVE[m]
+                ? t.active
                 : "border-transparent text-muted hover:text-foreground"
             }`}
           >
-            {LABEL[m]}
+            {t.label}
           </Link>
         );
       })}
