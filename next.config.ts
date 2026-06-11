@@ -19,8 +19,10 @@ const securityHeaders = [
       "font-src 'self'",
       // Next.js injects inline bootstrap/runtime styles and scripts.
       "style-src 'self' 'unsafe-inline'",
-      "script-src 'self' 'unsafe-inline'",
-      "connect-src 'self'",
+      // Cloudflare Web Analytics beacon (the site is CF-proxied) — without it
+      // the browser logs a CSP violation on every page view.
+      "script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com",
+      "connect-src 'self' https://cloudflareinsights.com",
       "frame-ancestors 'self'",
       "base-uri 'self'",
       "form-action 'self'",
