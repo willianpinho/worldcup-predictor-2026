@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { ActualBracket } from "@/components/knockout/ActualBracket";
+import { ArmTabs } from "@/components/knockout/ArmTabs";
 import { Bracket } from "@/components/knockout/Bracket";
+import { BracketScores } from "@/components/knockout/BracketScores";
 import { ChampionBanner } from "@/components/knockout/ChampionBanner";
 import { ModelTabs } from "@/components/knockout/ModelTabs";
 import { QualificationSummary } from "@/components/knockout/QualificationSummary";
+import { CONDITION_META, type Condition, isCondition } from "@/lib/conditions";
 import { formatRunTimestamp } from "@/lib/format";
 import { getKnockoutMatches } from "@/lib/knockout/actual";
 import { getKnockoutRun } from "@/lib/knockout/runs";
@@ -36,29 +39,44 @@ async function ActualView() {
       </div>
     );
   }
-  return <ActualBracket matches={matches} />;
-}
-
-function PredictedView({ model }: { model: KnockoutModel }) {
-  const run = getKnockoutRun(model);
-  if (!run) {
-    return (
-      <div className="rounded-2xl border border-dashed border-border bg-surface/40 p-10 text-center">
-        <p className="text-sm text-muted">
-          Knockout predictions for {LABEL[model]} haven&apos;t been generated
-          yet.
-        </p>
-      </div>
-    );
-  }
   return (
     <div className="space-y-6">
-      <div className="text-xs text-muted">
-        {run.engine} · {formatRunTimestamp(run.generatedAt)}
-      </div>
-      <ChampionBanner run={run} />
-      <QualificationSummary qualification={run.qualification} />
-      <Bracket run={run} />
+      <BracketScores real={matches} />
+      <ActualBracket matches={matches} />
+    </div>
+  );
+}
+
+function PredictedView({
+  model,
+  arm,
+}: {
+  model: KnockoutModel;
+  arm: Condition;
+}) {
+  const run = getKnockoutRun(model, arm);
+  return (
+    <div className="space-y-6">
+      <ArmTabs model={model} current={arm} />
+      {!run ? (
+        <div className="rounded-2xl border border-dashed border-border bg-surface/40 p-10 text-center">
+          <p className="text-sm text-muted">
+            No {CONDITION_META[arm].label.toLowerCase()}-arm knockout run
+            recorded for {LABEL[model]} yet.
+          </p>
+        </div>
+      ) : (
+        <>
+          <div className="text-xs text-muted">
+            {run.engine} · {formatRunTimestamp(run.generatedAt)} · chained on
+            the {CONDITION_META[run.condition].label.toLowerCase()} arm&apos;s
+            group-stage scorelines
+          </div>
+          <ChampionBanner run={run} />
+          <QualificationSummary qualification={run.qualification} />
+          <Bracket run={run} />
+        </>
+      )}
     </div>
   );
 }
@@ -69,7 +87,10 @@ export default async function KnockoutPage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const view: KnockoutView = resolveView((await searchParams).model);
+  const params = await searchParams;
+  const view: KnockoutView = resolveView(params.model);
+  const rawArm = typeof params.arm === "string" ? params.arm : "web";
+  const arm: Condition = isCondition(rawArm) ? rawArm : "web";
 
   return (
     <div className="space-y-6">
@@ -82,7 +103,11 @@ export default async function KnockoutPage({
 
       <ModelTabs active={view} />
 
-      {view === "actual" ? <ActualView /> : <PredictedView model={view} />}
+      {view === "actual" ? (
+        <ActualView />
+      ) : (
+        <PredictedView model={view} arm={arm} />
+      )}
     </div>
   );
 }

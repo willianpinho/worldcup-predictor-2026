@@ -109,9 +109,12 @@ R32-1 and R32-2 meet in R16-1, and so on up the bracket to the final.
 
 STEP 4 — Predict every tie. For each match predict the score after 90 minutes or extra time,
 set "decidedBy" (regulation, extra-time or penalties), and on a draw add the penalty shootout
-("pensA"/"pensB"). Give "winner" and a one-sentence "reasoning". Advance the winners round by
-round: Round of 16 (8 ties), Quarter-finals (4), Semi-finals (2), the Third-place match (the
-two beaten semi-finalists) and the Final.
+("pensA"/"pensB"). RULE: "extra-time" means the score is NO LONGER LEVEL after 120 minutes
+(e.g. 2–1); if the score is still level after extra time, you MUST use "penalties" with
+"pensA"/"pensB". A level score with decidedBy "extra-time" is invalid. Give "winner" and a
+one-sentence "reasoning". Advance the winners round by round: Round of 16 (8 ties),
+Quarter-finals (4), Semi-finals (2), the Third-place match (the two beaten semi-finalists)
+and the Final.
 
 STEP 5 — Champion and Golden Boot. Name the "champion" (= the final's winner) and a
 "goldenBoot" pick (player, team, and expected "goals").
