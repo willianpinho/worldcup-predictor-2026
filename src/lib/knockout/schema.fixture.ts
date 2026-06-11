@@ -77,6 +77,7 @@ export function buildValidRun(): KnockoutRun {
 
   return {
     model: "claude",
+    condition: "web",
     generatedAt: "2026-06-10T12:00:00Z",
     engine: "Test Engine 1.0",
     qualification: {

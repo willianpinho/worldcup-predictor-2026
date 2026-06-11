@@ -4,6 +4,7 @@
 // validates internal consistency (winners, scores, penalties, round progression); the
 // bracket STRUCTURE the model proposes is its own claim and part of the experiment.
 import { z } from "zod";
+import { CONDITIONS } from "../conditions";
 import { normalizeTeam } from "../teams";
 
 export const MODELS = ["claude", "gemini", "openai"] as const;
@@ -84,6 +85,8 @@ const GoldenBoot = z.object({
 
 const Base = z.object({
   model: ModelEnum,
+  // Experiment arm the bracket chains on (its group-stage input scorelines).
+  condition: z.enum(CONDITIONS).default("web"),
   generatedAt: z.iso.datetime({ offset: true }),
   engine: z.string().trim().min(1),
   notes: z.string().optional(),

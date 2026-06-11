@@ -12,7 +12,9 @@
 
 import "dotenv/config";
 import { readFileSync, writeFileSync } from "node:fs";
+import { isCondition } from "../src/lib/conditions";
 import { parseKnockoutRun } from "../src/lib/knockout/schema";
+import { chatViaClaudeCli } from "./lib/claudeCli";
 import { chatViaGeminiCli } from "./lib/geminiCli";
 import {
   chat,
@@ -49,8 +51,13 @@ async function main(): Promise<void> {
   if (!engine || engine === "true")
     fail('--engine "<human label>" is required');
   const via = flags.via || "litellm";
-  if (via !== "litellm" && via !== "gemini-cli")
-    fail("--via must be litellm or gemini-cli");
+  if (via !== "litellm" && via !== "gemini-cli" && via !== "claude-cli")
+    fail("--via must be litellm, gemini-cli or claude-cli");
+
+  // Arm of the group-stage input the bracket chains on (recorded in the run file).
+  const condition = flags.condition || "web";
+  if (!isCondition(condition))
+    fail("--condition must be web, baseline or enriched");
 
   const input = flags.input;
   if (!input || input === "true")
@@ -64,7 +71,9 @@ async function main(): Promise<void> {
   if (Number.isNaN(maxTokens)) fail("--max-tokens must be a number");
 
   const today = new Date().toISOString().slice(0, 10);
-  const out = flags.out || `docs/runs/knockout-${model}-${today}.json`;
+  const armSuffix = condition === "web" ? "" : `-${condition}`;
+  const out =
+    flags.out || `docs/runs/knockout-${model}${armSuffix}-${today}.json`;
 
   // The model's own 72 group-stage predictions become the INPUT block.
   const groupRun = JSON.parse(readFileSync(input, "utf8")) as {
@@ -87,12 +96,15 @@ async function main(): Promise<void> {
   let send: (
     p: string,
   ) => Promise<{ content: string; totalTokens?: number; toolCalls?: number }>;
-  if (via === "gemini-cli") {
+  if (via === "gemini-cli" || via === "claude-cli") {
     const cliModel = flags["cli-model"];
     if (!cliModel || cliModel === "true")
-      fail("--cli-model <gemini model id> is required with --via gemini-cli");
-    send = async (p) => chatViaGeminiCli(cliModel, p);
-    console.log(`Running knockout ${model} via gemini CLI (${cliModel})`);
+      fail(`--cli-model <model id> is required with --via ${via}`);
+    send =
+      via === "gemini-cli"
+        ? async (p) => chatViaGeminiCli(cliModel, p)
+        : async (p) => chatViaClaudeCli(cliModel, p);
+    console.log(`Running knockout ${model} via ${via} (${cliModel})`);
   } else {
     const litellmModel = flags["litellm-model"];
     if (!litellmModel || litellmModel === "true")
@@ -118,7 +130,7 @@ async function main(): Promise<void> {
   let prompt = basePrompt;
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     const { content, totalTokens, toolCalls } = await send(prompt);
-    if (via === "gemini-cli" && (toolCalls ?? 0) > 0) {
+    if (via !== "litellm" && (toolCalls ?? 0) > 0) {
       if (attempt === MAX_RETRIES)
         fail(
           `Transport used ${toolCalls} tool call(s) on every attempt — no-tools run violated`,
@@ -149,6 +161,7 @@ async function main(): Promise<void> {
       console.log(`  ok on attempt ${attempt}${tokenNote}`);
       const runFile = {
         ...result.run,
+        condition,
         engine,
         generatedAt: new Date().toISOString(),
       };

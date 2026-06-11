@@ -49,6 +49,11 @@ consistency (winners match scores, each round is a perfect matching of the previ
 round's winners, champion = final winner); the bracket pairing itself is the model's
 claim — knowing the official format is part of the test.
 
+One bracket is recorded per model **per arm** (each chained on that arm's own group
+scorelines — 9 brackets total). As the real knockout fills in, every bracket is scored
+pool-style: **1/2/4/8/16 points per team correctly placed** in the real R32/R16/QF/SF/
+final, **+32 for the champion** (max 192) — shown on the `/knockout` Actual tab.
+
 ### Methodological notes & limitations
 
 - **API arms receive the fixture list** (the web arm had to recall the official draw) —
@@ -63,8 +68,10 @@ claim — knowing the official format is part of the test.
   alphabetical); fair-play points and drawing of lots are not reproducible from scorelines.
 - Predictions were locked before the tournament: group-stage web runs on 2026-06-09,
   everything else on 2026-06-10 — kickoff is 2026-06-11.
-- **Future work:** player-level predictions (scorers, cards) scored against match event
-  data; knockout brackets for the baseline/enriched arms.
+- **Out of scope (by design):** player-level predictions (scorers, cards). Adding them
+  after kickoff would break the predictions-locked-before-the-tournament guarantee, and
+  scoring them requires a per-match event-data feed the project doesn't consume; the
+  tournament-level Golden Boot pick in each bracket is the deliberate lightweight proxy.
 
 ## Scoring
 
