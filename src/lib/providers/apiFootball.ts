@@ -21,7 +21,9 @@ interface ApiFootballFixture {
 
 function mapStatus(short: string): FixtureStatus {
   if (["FT", "AET", "PEN"].includes(short)) return "FINISHED";
-  if (["1H", "2H", "HT", "ET", "BT", "P", "LIVE", "INT", "SUSP"].includes(short)) {
+  if (
+    ["1H", "2H", "HT", "ET", "BT", "P", "LIVE", "INT", "SUSP"].includes(short)
+  ) {
     return "LIVE";
   }
   return "SCHEDULED";
@@ -37,9 +39,12 @@ export async function fetchApiFootballFixtures(): Promise<FixtureInput[]> {
   const league = process.env.FOOTBALL_LEAGUE_ID ?? "1";
   const season = process.env.FOOTBALL_SEASON ?? "2026";
 
-  const res = await fetch(`${BASE}/fixtures?league=${league}&season=${season}`, {
-    headers: { "x-apisports-key": process.env.FOOTBALL_API_KEY ?? "" },
-  });
+  const res = await fetch(
+    `${BASE}/fixtures?league=${league}&season=${season}`,
+    {
+      headers: { "x-apisports-key": process.env.FOOTBALL_API_KEY ?? "" },
+    },
+  );
   if (!res.ok) throw new Error(`API-Football HTTP ${res.status}`);
 
   const json = (await res.json()) as {
@@ -47,16 +52,24 @@ export async function fetchApiFootballFixtures(): Promise<FixtureInput[]> {
     errors?: unknown;
   };
   if (!Array.isArray(json.response)) {
-    throw new Error(`API-Football payload error: ${JSON.stringify(json.errors)}`);
+    throw new Error(
+      `API-Football payload error: ${JSON.stringify(json.errors)}`,
+    );
   }
 
-  const groupFixtures = json.response.filter((f) => /group/i.test(f.league.round));
+  // Group-stage only. Knockout results come from openfootball (or a manual
+  // override); a placeholder-bracket feed is not worth the extra mapping here.
+  const groupFixtures = json.response.filter((f) =>
+    /group/i.test(f.league.round),
+  );
 
   return groupFixtures.map((f) => {
     const g = parseGroupLetter(f.league.round);
     const md = f.league.round.match(/-\s*(\d)/);
     return {
       extId: naturalKey(g, f.teams.home.name, f.teams.away.name),
+      stage: "GROUP",
+      matchNum: null,
       groupName: g,
       teamA: f.teams.home.name,
       teamB: f.teams.away.name,
@@ -67,6 +80,8 @@ export async function fetchApiFootballFixtures(): Promise<FixtureInput[]> {
       status: mapStatus(f.fixture.status.short),
       scoreA: f.goals.home,
       scoreB: f.goals.away,
+      pensA: null,
+      pensB: null,
       round: md ? Number.parseInt(md[1], 10) : 1,
     } satisfies FixtureInput;
   });

@@ -15,6 +15,8 @@ async function main() {
       where: { extId: f.extId },
       create: {
         extId: f.extId,
+        stage: f.stage,
+        matchNum: f.matchNum,
         groupName: f.groupName,
         teamA: f.teamA,
         teamB: f.teamB,
@@ -25,10 +27,15 @@ async function main() {
         status: f.status,
         scoreA: f.scoreA,
         scoreB: f.scoreB,
+        pensA: f.pensA,
+        pensB: f.pensB,
         round: f.round,
       },
-      // Re-seed refreshes schedule metadata but never clobbers recorded results.
+      // Re-seed refreshes schedule metadata (incl. placeholder codes → real names)
+      // but never clobbers recorded results.
       update: {
+        stage: f.stage,
+        matchNum: f.matchNum,
         groupName: f.groupName,
         teamA: f.teamA,
         teamB: f.teamB,
