@@ -12,6 +12,12 @@ standardized dataset are versioned in this repository.
 
 ![Leaderboard — Claude vs Gemini vs OpenAI](docs/screenshot.png)
 
+| Predicted standings                                                                | Predicted knockout bracket                                                   |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ![FIFA-style group standings implied by each model](docs/screenshot-standings.png) | ![Knockout bracket to the champion, per model](docs/screenshot-knockout.png) |
+
+![Group-stage matches with flags and per-model predictions](docs/screenshot-matches.png)
+
 ## Experiment design
 
 Each model runs under three conditions (_arms_), isolating where the predictive skill
@@ -73,7 +79,9 @@ guesses.
 - `/matches` — all 72 fixtures, flags, per-model predictions, results, points.
 - `/standings` — FIFA-style group tables: actual vs the final tables implied by each
   model's predicted scorelines, with qualification cutoffs (top 2 + best 8 thirds).
-- `/knockout` — each model's predicted bracket to the champion, with Golden Boot pick.
+- `/knockout` — the **actual** bracket (official placeholders that fill in as the
+  tournament progresses) plus each model's predicted bracket to the champion, with
+  Golden Boot pick.
 - `/prompt` — every prompt variant and every raw model run, verbatim.
 - `/admin` — import runs, sync results, manual override (token-gated).
 
