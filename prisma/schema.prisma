@@ -11,11 +11,15 @@ datasource db {
   provider = "sqlite"
 }
 
-/// One group-stage fixture (72 of them, groups A–L).
+/// One fixture: the 72 group-stage matches (stage GROUP) plus the 32 knockout
+/// fixtures (stages R32..F). Knockout rows start with placeholder team codes
+/// (e.g. "2A", "W73") that fill in with real names as the tournament progresses.
 model Match {
   id        Int      @id @default(autoincrement())
-  extId     String?  @unique // API-Football fixture id (for idempotent seed/sync)
-  groupName String // 'A'..'L'
+  extId     String?  @unique // API-Football fixture id / "wc-ko-<num>" (idempotent seed/sync)
+  stage     String   @default("GROUP") // GROUP | R32 | R16 | QF | SF | TP | F (guarded in app code)
+  matchNum  Int?     @unique // official FIFA match number 73..104 (null for group)
+  groupName String // 'A'..'L' for group rows; the stage code for knockout rows
   teamA     String
   teamB     String
   venue     String?
@@ -25,7 +29,9 @@ model Match {
   status    String   @default("SCHEDULED") // SCHEDULED | LIVE | FINISHED
   scoreA    Int?
   scoreB    Int?
-  round     Int      @default(1) // matchday within the group (1..3)
+  pensA     Int? // penalty-shootout score (knockout only)
+  pensB     Int?
+  round     Int      @default(1) // matchday within the group (1..3); 1 for knockout
 
   predictions Prediction[]
 
@@ -34,6 +40,7 @@ model Match {
 
   @@index([groupName])
   @@index([kickoff])
+  @@index([stage])
 }
 
 /// One AI's prediction for a match. Unique per (match, model, condition).
