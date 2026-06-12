@@ -25,7 +25,11 @@ services:
       - traefik.http.services.worldcup.loadbalancer.server.port=3000
       - traefik.docker.network=traefik-network
 
-  # Polls the results-sync endpoint every 30 min so scores update automatically.
+  # Polls the results-sync endpoint every 10 min so scores update automatically
+  # during match windows. Syncs once on start (no blind window after a restart),
+  # then loops. Logs each run's timestamp + the JSON SyncReport so failures are
+  # observable in `docker compose logs cron` (the previous `-s ... || true` form
+  # was silent and hid the broken-provider failure for the tournament opener).
   cron:
     image: curlimages/curl:8.11.1
     restart: unless-stopped
@@ -38,7 +42,14 @@ services:
     entrypoint:
       - sh
       - -c
-      - 'while true; do sleep 1800; curl -s -X POST http://app:3000/api/results/sync -H "x-cron-secret: $$CRON_SECRET" || true; done'
+      - |
+        while true; do
+          echo "[cron $$(date -u +%FT%TZ)] sync ->"
+          curl -fsS -m 60 -X POST http://app:3000/api/results/sync \
+            -H "x-cron-secret: $$CRON_SECRET" || echo "[cron] sync request failed"
+          echo
+          sleep 600
+        done
 
 volumes:
   wc_db:

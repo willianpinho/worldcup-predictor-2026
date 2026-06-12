@@ -35,6 +35,19 @@ function parseGroupLetter(round: string): string {
   return m ? m[1].toUpperCase() : "?";
 }
 
+/**
+ * API-Football signals success with `errors: []` and any failure (bad/absent
+ * key, wrong host, exhausted plan) with a NON-EMPTY value — an object keyed by
+ * field (`{"token": "..."}`) or a non-empty array. Anything non-empty is a fail.
+ */
+export function hasApiErrors(errors: unknown): boolean {
+  if (errors == null) return false;
+  if (Array.isArray(errors)) return errors.length > 0;
+  if (typeof errors === "object") return Object.keys(errors).length > 0;
+  // A bare string/other truthy value is treated as an error.
+  return Boolean(errors);
+}
+
 export async function fetchApiFootballFixtures(): Promise<FixtureInput[]> {
   const league = process.env.FOOTBALL_LEAGUE_ID ?? "1";
   const season = process.env.FOOTBALL_SEASON ?? "2026";
@@ -55,6 +68,14 @@ export async function fetchApiFootballFixtures(): Promise<FixtureInput[]> {
     throw new Error(
       `API-Football payload error: ${JSON.stringify(json.errors)}`,
     );
+  }
+  // A success returns `errors: []`. An auth/quota/plan failure returns a
+  // populated object (e.g. {"token":"Missing application key"}) alongside an
+  // EMPTY `response` array — which previously slipped through as "0 fixtures"
+  // and silently suppressed the openfootball fallback. Treat any non-empty
+  // `errors` as a hard failure so the caller can fall back.
+  if (hasApiErrors(json.errors)) {
+    throw new Error(`API-Football error: ${JSON.stringify(json.errors)}`);
   }
 
   // Group-stage only. Knockout results come from openfootball (or a manual
