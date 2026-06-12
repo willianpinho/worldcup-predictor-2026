@@ -27,11 +27,17 @@ services:
       - traefik.http.services.worldcup.loadbalancer.server.port=3000
       - traefik.docker.network=traefik-network
 
-  # Polls the results-sync endpoint every 10 min so scores update automatically
-  # during match windows. Syncs once on start (no blind window after a restart),
-  # then loops. Logs each run's timestamp + the JSON SyncReport so failures are
-  # observable in `docker compose logs cron` (the previous `-s ... || true` form
-  # was silent and hid the broken-provider failure for the tournament opener).
+  # Polls the results-sync endpoint so scores update automatically. The cadence is
+  # MATCH-SCHEDULE-AWARE: the sync response carries `nextPollSeconds` (computed from
+  # the fixtures' kickoff windows in src/lib/poll-window.ts) — ~2.5 min during/around
+  # a match so finished scores show within minutes of full-time, and ~6 h when no
+  # match is near. This cuts request volume from ~144/day (fixed 10-min) to ~10/day
+  # on quiet days, so even a rate-limited provider's daily quota is never at risk.
+  #
+  # Syncs once on start (no blind window after a restart), then loops. Logs each
+  # run's timestamp + the JSON SyncReport so failures are observable in
+  # `docker compose logs cron` (the previous `-s ... || true` form was silent and
+  # hid the broken-provider failure for the tournament opener).
   #
   # IMPORTANT: the cron lives ONLY on the private `internal` network, not on the
   # shared `traefik-network`. On the shared network the alias `app` collides with
@@ -54,10 +60,13 @@ services:
       - |
         while true; do
           echo "[cron $$(date -u +%FT%TZ)] sync ->"
-          curl -fsS -m 60 -X POST http://app:3000/api/results/sync \
-            -H "x-cron-secret: $$CRON_SECRET" || echo "[cron] sync request failed"
-          echo
-          sleep 600
+          body=$$(curl -fsS -m 60 -X POST http://app:3000/api/results/sync \
+            -H "x-cron-secret: $$CRON_SECRET") || echo "[cron] sync request failed"
+          echo "$$body"
+          # Pull nextPollSeconds from the JSON; default to 600s if absent/failed.
+          delay=$$(echo "$$body" | grep -o '"nextPollSeconds":[0-9]*' | grep -o '[0-9]*$$')
+          case "$$delay" in ''|*[!0-9]*) delay=600 ;; esac
+          sleep "$$delay"
         done
 
 volumes:
