@@ -14,7 +14,9 @@ services:
     volumes:
       - wc_db:/app/data
     networks:
+      # Ingress (Traefik) + a private network shared only with the cron sidecar.
       - traefik-network
+      - internal
     labels:
       - traefik.enable=true
       - traefik.http.routers.worldcup.rule=Host(`worldcup2026.willianpinho.com`)
@@ -30,6 +32,13 @@ services:
   # then loops. Logs each run's timestamp + the JSON SyncReport so failures are
   # observable in `docker compose logs cron` (the previous `-s ... || true` form
   # was silent and hid the broken-provider failure for the tournament opener).
+  #
+  # IMPORTANT: the cron lives ONLY on the private `internal` network, not on the
+  # shared `traefik-network`. On the shared network the alias `app` collides with
+  # other projects' `app` services (their compose also aliases `app`), so docker
+  # DNS round-robined `http://app:3000` across containers and ~60% of syncs hit a
+  # foreign app and got a 404. The private network makes `app` resolve uniquely
+  # to this project's app container.
   cron:
     image: curlimages/curl:8.11.1
     restart: unless-stopped
@@ -38,7 +47,7 @@ services:
     environment:
       CRON_SECRET: "${CRON_SECRET:?set CRON_SECRET}"
     networks:
-      - traefik-network
+      - internal
     entrypoint:
       - sh
       - -c
@@ -58,3 +67,7 @@ networks:
   # External Traefik network on the VPS (test-ash).
   traefik-network:
     external: true
+  # Private bridge for app<->cron only, so the `app` alias is unambiguous and
+  # cannot collide with other projects' `app` services on the shared network.
+  internal:
+    driver: bridge
