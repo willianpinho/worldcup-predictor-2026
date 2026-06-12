@@ -1,4 +1,5 @@
 import { prisma } from "./db";
+import { nextPollSeconds } from "./poll-window";
 import {
   fetchFixturesForResults,
   resultsProviderName,
@@ -12,6 +13,11 @@ export interface SyncReport {
   withScores: number;
   updated: number;
   unmatched: string[];
+  /**
+   * Seconds the caller (cron) should wait before its next sync, derived from the
+   * fixtures' kickoff windows: short during/around matches, long when idle.
+   */
+  nextPollSeconds: number;
 }
 
 /**
@@ -81,6 +87,9 @@ export async function syncResults(): Promise<SyncReport> {
     withScores,
     updated,
     unmatched,
+    // Reuse the rows we already loaded (they carry kickoff + status) so the cron
+    // can self-throttle: poll every few minutes around matches, rarely otherwise.
+    nextPollSeconds: nextPollSeconds(rows, new Date()),
   };
 }
 
