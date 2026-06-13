@@ -18,6 +18,7 @@ const ROUND_TO_STAGE: Record<string, KoStage> = {
   "semi-finals": "SF",
   "match for third place": "TP",
   "third place play-off": "TP",
+  "play-off for third place": "TP", // FIFA label
   final: "F",
 };
 
