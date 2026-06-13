@@ -40,6 +40,7 @@ const ALIASES: Record<string, string> = {
   republicatcheca: "czechrepublic",
   tchequia: "czechrepublic",
   chequia: "czechrepublic",
+  czechia: "czechrepublic", // FIFA spelling
   // South America
   brasil: "brazil",
   // Africa
@@ -50,18 +51,23 @@ const ALIASES: Record<string, string> = {
   senegal: "senegal",
   costadomarfim: "ivorycoast",
   cotedivoire: "ivorycoast",
+  caboverde: "capeverde", // FIFA spelling (openfootball: "Cape Verde")
+  congodr: "drcongo", // FIFA spelling (openfootball: "DR Congo")
   // Asia / others
   coreiadosul: "southkorea",
   coreia: "southkorea",
+  korearepublic: "southkorea", // FIFA spelling
   arabiasaudita: "saudiarabia",
   catar: "qatar",
   japao: "japan",
   ira: "iran",
+  iriran: "iran", // FIFA spelling
   australia: "australia",
   novazelandia: "newzealand",
   bosnia: "bosniaandherzegovina",
   bosniaeherzegovina: "bosniaandherzegovina",
   bosniaherzegovina: "bosniaandherzegovina",
+  turkiye: "turkey", // FIFA spelling (openfootball: "Turkey")
 };
 
 /** Canonical, comparison-safe team identifier. */
@@ -89,6 +95,10 @@ export function pairKey(teamA: string, teamB: string): string {
  * Natural key for a fixture: group + the team pair. Used as Match.extId so the
  * seed is idempotent.
  */
-export function naturalKey(group: string, teamA: string, teamB: string): string {
+export function naturalKey(
+  group: string,
+  teamA: string,
+  teamB: string,
+): string {
   return `wc-${groupLetter(group)}-${pairKey(teamA, teamB)}`;
 }
