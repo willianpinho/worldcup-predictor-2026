@@ -38,6 +38,23 @@ export function formatShortDate(date: Date): string {
   return SHORT_DAY_FMT.format(date);
 }
 
+const DAY_HEADER_FMT = new Intl.DateTimeFormat("en-US", {
+  weekday: "long",
+  month: "long",
+  day: "numeric",
+  timeZone: "UTC",
+});
+
+/** Day key (UTC) for grouping matches by calendar day, e.g. "2026-06-11". */
+export function utcDayKey(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
+/** Timeline day header, in UTC, e.g. "Thursday, June 11". */
+export function formatDayHeader(date: Date): string {
+  return DAY_HEADER_FMT.format(date);
+}
+
 /** Primary city from an openfootball ground, e.g. "Los Angeles (Inglewood)" -> "Los Angeles". */
 export function cityLabel(ground: string | null): string | null {
   if (!ground) return null;
