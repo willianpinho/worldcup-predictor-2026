@@ -5,6 +5,7 @@ import {
   pointsBadgeClass,
   utcDayKey,
 } from "@/lib/format";
+import { JumpToToday } from "@/components/JumpToToday";
 import {
   MODELS,
   type MatchView,
@@ -164,12 +165,34 @@ function groupByDay(matches: MatchView[]): MatchDay[] {
   return [...days.values()];
 }
 
+/**
+ * Pick the day to anchor "today" to: the exact UTC day if it has matches,
+ * else the nearest upcoming day, else the last day (post-tournament).
+ * `days` is chronological. Returns null only when there are no days.
+ */
+function selectTargetKey(days: MatchDay[]): string | null {
+  if (days.length === 0) return null;
+  const todayKey = utcDayKey(new Date());
+  const upcoming = days.find((day) => day.key >= todayKey);
+  return (upcoming ?? days[days.length - 1]).key;
+}
+
 export function MatchList({ matches }: { matches: MatchView[] }) {
   const days = groupByDay(matches);
+  const targetKey = selectTargetKey(days);
+  // No affordance / auto-jump when the target is already the top of the list
+  // (pre-tournament: nearest-upcoming resolves to the first day).
+  const showJump = targetKey !== null && days[0]?.key !== targetKey;
+
   return (
     <div className="space-y-8">
+      {showJump && <JumpToToday anchorId="today" />}
       {days.map((day) => (
-        <section key={day.key}>
+        <section
+          key={day.key}
+          id={day.key === targetKey ? "today" : undefined}
+          className={day.key === targetKey ? "scroll-mt-24" : undefined}
+        >
           <h2 className="mb-3 border-l-2 border-accent pl-2.5 text-lg font-semibold">
             {formatDayHeader(day.date)}
           </h2>
@@ -180,6 +203,15 @@ export function MatchList({ matches }: { matches: MatchView[] }) {
           </div>
         </section>
       ))}
+      {showJump && (
+        <a
+          href="#today"
+          className="fixed bottom-5 right-5 z-10 inline-flex items-center gap-1.5 rounded-full border border-accent bg-surface/90 px-4 py-2 text-sm font-medium text-accent shadow-lg backdrop-blur transition-colors hover:bg-accent hover:text-surface"
+        >
+          <span aria-hidden>↓</span>
+          Jump to today
+        </a>
+      )}
     </div>
   );
 }
