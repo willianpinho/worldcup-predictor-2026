@@ -18,10 +18,11 @@ export default async function MatchesPage({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Group-stage matches</h1>
+        <h1 className="text-2xl font-bold">Group-stage timeline</h1>
         <p className="mt-1 text-sm text-muted">
-          72 matches, June 11–27. <span className="text-claude">C</span> =
-          Claude · <span className="text-gemini">G</span> = Gemini ·{" "}
+          72 matches in kickoff order, June 11–27.{" "}
+          <span className="text-claude">C</span> = Claude ·{" "}
+          <span className="text-gemini">G</span> = Gemini ·{" "}
           <span className="text-openai">O</span> = OpenAI. Kickoff times in UTC.
         </p>
       </div>
