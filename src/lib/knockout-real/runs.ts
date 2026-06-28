@@ -9,6 +9,10 @@
 // e.g.
 //   import claudeEnriched from "../../../docs/runs/knockout-real-claude-enriched-2026-06-28.json";
 //   const RAW_RUNS: unknown[] = [claudeEnriched];
+import claudeBaseline from "../../../docs/runs/knockout-real-claude-baseline-2026-06-28.json";
+import claudeEnriched from "../../../docs/runs/knockout-real-claude-enriched-2026-06-28.json";
+import openaiBaseline from "../../../docs/runs/knockout-real-openai-baseline-2026-06-28.json";
+import openaiEnriched from "../../../docs/runs/knockout-real-openai-enriched-2026-06-28.json";
 import type { Condition } from "../conditions";
 import {
   parseRealKnockoutRun,
@@ -16,8 +20,14 @@ import {
   type RealKnockoutRun,
 } from "./schema";
 
-// Raw static JSON imports — one bracket per (model, arm). Empty until runs are recorded.
-const RAW_RUNS: unknown[] = [];
+// Raw static JSON imports — one bracket per (model, arm). The web arm needs a web-enabled
+// transport (added later); gemini needs the gemini-cli OAuth set up.
+const RAW_RUNS: unknown[] = [
+  claudeBaseline,
+  claudeEnriched,
+  openaiBaseline,
+  openaiEnriched,
+];
 
 function load(raw: unknown): RealKnockoutRun {
   const result = parseRealKnockoutRun(raw);

@@ -1,0 +1,353 @@
+{
+  "model": "openai",
+  "condition": "baseline",
+  "generatedAt": "2026-06-28T20:53:45.297Z",
+  "engine": "OpenAI GPT-5.2 (OpenAI API)",
+  "notes": "Knockout predictions conditioned on the provided final group-stage tables and the official Round-of-32 bracket; ties level after 120' go to penalties with shootout scores included.",
+  "rounds": {
+    "roundOf32": [
+      {
+        "slot": "R32-1",
+        "teamA": "South Africa",
+        "teamB": "Canada",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Canada",
+        "reasoning": "Canada’s group-stage underlying attacking output and +5 goal difference suggest they can create more high-quality chances than South Africa over 90 minutes."
+      },
+      {
+        "slot": "R32-2",
+        "teamA": "Germany",
+        "teamB": "Paraguay",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Germany",
+        "reasoning": "Germany’s +6 goal difference and control-oriented game should limit Paraguay’s transitions and convert pressure into a clean-sheet win."
+      },
+      {
+        "slot": "R32-3",
+        "teamA": "Netherlands",
+        "teamB": "Morocco",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 5,
+        "pensB": 4,
+        "winner": "Netherlands",
+        "reasoning": "Morocco’s defensive organisation can force extra time, but the Netherlands’ depth and set-piece/penalty specialists give them a narrow edge in a shootout."
+      },
+      {
+        "slot": "R32-4",
+        "teamA": "Brazil",
+        "teamB": "Japan",
+        "scoreA": 3,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Brazil",
+        "reasoning": "Brazil’s group-stage goal difference (+6) and individual match-winners in wide areas are a difficult matchup for Japan’s high-tempo but riskier defensive line."
+      },
+      {
+        "slot": "R32-5",
+        "teamA": "France",
+        "teamB": "Sweden",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "France",
+        "reasoning": "France’s perfect group (9 points, +8) indicates elite chance suppression and transition threat that Sweden will struggle to withstand for 90 minutes."
+      },
+      {
+        "slot": "R32-6",
+        "teamA": "Côte d'Ivoire",
+        "teamB": "Norway",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 4,
+        "pensB": 3,
+        "winner": "Côte d'Ivoire",
+        "reasoning": "Norway’s direct threat can level it, but Côte d'Ivoire’s athleticism and game management from a strong group showing make them slightly more reliable late on."
+      },
+      {
+        "slot": "R32-7",
+        "teamA": "Mexico",
+        "teamB": "Ecuador",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Mexico",
+        "reasoning": "Mexico’s 9 points and +6 combined with regional/host-environment familiarity should translate into territorial dominance and enough chances to edge a tight game."
+      },
+      {
+        "slot": "R32-8",
+        "teamA": "England",
+        "teamB": "Congo DR",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "England",
+        "reasoning": "England’s structured pressing and set-piece strength should overwhelm Congo DR’s resistance over time, especially with England’s +4 group margin."
+      },
+      {
+        "slot": "R32-9",
+        "teamA": "USA",
+        "teamB": "Bosnia and Herzegovina",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "USA",
+        "reasoning": "USA’s +4 goal difference and home-continent advantage in tempo and travel should tilt a physical matchup decisively in their favour."
+      },
+      {
+        "slot": "R32-10",
+        "teamA": "Belgium",
+        "teamB": "Senegal",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 4,
+        "pensB": 5,
+        "winner": "Senegal",
+        "reasoning": "Belgium’s control can be matched by Senegal’s athletic pressing, and Senegal’s momentum as a dangerous third-place side makes them a credible upset in penalties."
+      },
+      {
+        "slot": "R32-11",
+        "teamA": "Portugal",
+        "teamB": "Croatia",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "extra-time",
+        "winner": "Portugal",
+        "reasoning": "Croatia can drag the game deep with midfield control, but Portugal’s greater vertical threat and depth off the bench should decide it in extra time."
+      },
+      {
+        "slot": "R32-12",
+        "teamA": "Spain",
+        "teamB": "Austria",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Spain",
+        "reasoning": "Spain’s +5 group performance and ball-dominance should pin Austria back and reduce their ability to press and counter effectively."
+      },
+      {
+        "slot": "R32-13",
+        "teamA": "Switzerland",
+        "teamB": "Algeria",
+        "scoreA": 1,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Switzerland",
+        "reasoning": "Switzerland’s +4 and consistent defensive structure make them well-suited to managing Algeria’s bursts while nicking a decisive moment."
+      },
+      {
+        "slot": "R32-14",
+        "teamA": "Argentina",
+        "teamB": "Cabo Verde",
+        "scoreA": 3,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Argentina",
+        "reasoning": "Argentina’s perfect group (9 points, +7) suggests a large quality gap that should show in chance creation and finishing."
+      },
+      {
+        "slot": "R32-15",
+        "teamA": "Colombia",
+        "teamB": "Ghana",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Colombia",
+        "reasoning": "Colombia’s balanced +3 group profile and ball-winning midfield should blunt Ghana’s transitions while producing enough chances to win."
+      },
+      {
+        "slot": "R32-16",
+        "teamA": "Australia",
+        "teamB": "Egypt",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Egypt",
+        "reasoning": "Egypt’s steadier group output (+2) and ability to punish set pieces and moments in the box give them an edge over Australia’s thinner margins."
+      }
+    ],
+    "roundOf16": [
+      {
+        "slot": "R16-1",
+        "teamA": "Canada",
+        "teamB": "Germany",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Germany",
+        "reasoning": "Germany’s control in midfield and defensive stability should outlast Canada’s athletic surges over 90 minutes."
+      },
+      {
+        "slot": "R16-2",
+        "teamA": "Netherlands",
+        "teamB": "Brazil",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "extra-time",
+        "winner": "Brazil",
+        "reasoning": "A high-level tactical game likely stays tight, but Brazil’s individual dribbling and finishing quality can decide it late in extra time."
+      },
+      {
+        "slot": "R16-3",
+        "teamA": "France",
+        "teamB": "Côte d'Ivoire",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "France",
+        "reasoning": "France’s pace in transition and elite chance suppression should prevent Côte d'Ivoire from turning athleticism into clear chances."
+      },
+      {
+        "slot": "R16-4",
+        "teamA": "Mexico",
+        "teamB": "England",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "England",
+        "reasoning": "Mexico’s momentum and home-region comfort keep it close, but England’s box threat and set pieces provide the difference."
+      },
+      {
+        "slot": "R16-5",
+        "teamA": "USA",
+        "teamB": "Senegal",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 5,
+        "pensB": 4,
+        "winner": "USA",
+        "reasoning": "Senegal’s pressing can neutralise build-up, yet USA’s home-continent edge and goalkeeper variance make a shootout swing their way."
+      },
+      {
+        "slot": "R16-6",
+        "teamA": "Portugal",
+        "teamB": "Spain",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "extra-time",
+        "winner": "Spain",
+        "reasoning": "A low-margin Iberian derby is likely to extend, and Spain’s collective chance creation and control can edge it in extra time."
+      },
+      {
+        "slot": "R16-7",
+        "teamA": "Switzerland",
+        "teamB": "Argentina",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Argentina",
+        "reasoning": "Switzerland are organised, but Argentina’s attacking combinations and finishing efficiency from a +7 group stage should be decisive."
+      },
+      {
+        "slot": "R16-8",
+        "teamA": "Colombia",
+        "teamB": "Egypt",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Colombia",
+        "reasoning": "Colombia’s midfield control and progression should create more sustained pressure than Egypt can manage without ceding chances."
+      }
+    ],
+    "quarterfinals": [
+      {
+        "slot": "QF-1",
+        "teamA": "Germany",
+        "teamB": "Brazil",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Brazil",
+        "reasoning": "Germany’s structure keeps it close, but Brazil’s superior shot-making in key moments should decide a one-goal game."
+      },
+      {
+        "slot": "QF-2",
+        "teamA": "France",
+        "teamB": "England",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 5,
+        "pensB": 4,
+        "winner": "France",
+        "reasoning": "Two elite transition teams can cancel out in open play, and France’s tournament momentum plus penalty quality edges the shootout."
+      },
+      {
+        "slot": "QF-3",
+        "teamA": "USA",
+        "teamB": "Spain",
+        "scoreA": 0,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Spain",
+        "reasoning": "Spain’s ability to control territory and limit counterattacks should reduce USA’s primary threat while generating enough chances to win."
+      },
+      {
+        "slot": "QF-4",
+        "teamA": "Argentina",
+        "teamB": "Colombia",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "extra-time",
+        "winner": "Argentina",
+        "reasoning": "A familiar South American matchup can go long, and Argentina’s higher-end finishing in the final actions can decide it in extra time."
+      }
+    ],
+    "semifinals": [
+      {
+        "slot": "SF-1",
+        "teamA": "Brazil",
+        "teamB": "France",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "extra-time",
+        "winner": "France",
+        "reasoning": "Both sides have match-winners, but France’s transition efficiency and depth to raise intensity late give them an extra-time edge."
+      },
+      {
+        "slot": "SF-2",
+        "teamA": "Spain",
+        "teamB": "Argentina",
+        "scoreA": 1,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Spain",
+        "reasoning": "Spain’s ball retention and pressing structure can starve Argentina of controlled entries, making a narrow 90-minute win plausible."
+      }
+    ],
+    "thirdPlace": {
+      "slot": "TP",
+      "teamA": "Brazil",
+      "teamB": "Argentina",
+      "scoreA": 2,
+      "scoreB": 1,
+      "decidedBy": "regulation",
+      "winner": "Brazil",
+      "reasoning": "With slightly more attacking depth to rotate after extra time in the semi, Brazil can outscore Argentina in a more open third-place match."
+    },
+    "final": {
+      "slot": "F",
+      "teamA": "France",
+      "teamB": "Spain",
+      "scoreA": 2,
+      "scoreB": 1,
+      "decidedBy": "extra-time",
+      "winner": "France",
+      "reasoning": "Spain’s control can force extra time, but France’s superior direct threat and bench impact can produce the decisive moment late."
+    }
+  },
+  "champion": "France",
+  "goldenBoot": {
+    "player": "Kylian Mbappé",
+    "team": "France",
+    "goals": 7
+  }
+}
