@@ -14,6 +14,7 @@
 // Env (litellm transport): LITELLM_BASE_URL (default http://localhost:4000), LITELLM_API_KEY.
 
 import "dotenv/config";
+import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { isCondition } from "../src/lib/conditions";
 import { REAL_CONTEXT } from "../src/lib/knockout-real/context";
@@ -92,6 +93,32 @@ async function chatOpenAiDirect(
   return { content, totalTokens: data.usage?.total_tokens, toolCalls: 0 };
 }
 
+/**
+ * Antigravity CLI (`agy`) transport — the replacement for the Gemini CLI. `agy -p` runs a
+ * single non-interactive prompt and prints the plain-text response. No tools are requested by
+ * a JSON-only generation prompt, so this is a clean no-tool call (we do not pass
+ * --dangerously-skip-permissions, so any tool request would be denied rather than auto-run).
+ */
+function chatViaAgy(
+  model: string,
+  prompt: string,
+): { content: string; totalTokens?: number; toolCalls: number } {
+  const res = spawnSync("agy", ["-p", prompt, "--model", model], {
+    encoding: "utf8",
+    windowsHide: true,
+    maxBuffer: 64 * 1024 * 1024,
+    timeout: 12 * 60 * 1000,
+  });
+  if (res.error) throw new Error(`agy failed to start: ${res.error.message}`);
+  if (res.status !== 0)
+    throw new Error(
+      `agy exited ${res.status}: ${(res.stderr || "").slice(-300)}`,
+    );
+  const content = (res.stdout || "").trim();
+  if (!content) throw new Error("agy returned empty output");
+  return { content, toolCalls: 0 };
+}
+
 /** Enriched-only: a standardized ratings table for the 32 qualifiers (FIFA rank + Elo). */
 function renderQualifierRatings(datasetPath: string): string {
   const dataset = JSON.parse(
@@ -132,9 +159,10 @@ async function main(): Promise<void> {
     via !== "litellm" &&
     via !== "gemini-cli" &&
     via !== "claude-cli" &&
-    via !== "openai-direct"
+    via !== "openai-direct" &&
+    via !== "agy"
   )
-    fail("--via must be litellm, gemini-cli, claude-cli or openai-direct");
+    fail("--via must be litellm, gemini-cli, claude-cli, openai-direct or agy");
 
   const condition = flags.condition || "enriched";
   if (!isCondition(condition))
@@ -176,6 +204,16 @@ async function main(): Promise<void> {
         : async (p) => chatViaClaudeCli(cliModel, p);
     console.log(
       `Running Stage-2 knockout ${model} (${condition}) via ${via} (${cliModel})`,
+    );
+  } else if (via === "agy") {
+    const agyModel = flags["cli-model"];
+    if (!agyModel || agyModel === "true")
+      fail(
+        '--cli-model "<agy model, e.g. Gemini 3.1 Pro (High)>" is required with --via agy',
+      );
+    send = async (p) => chatViaAgy(agyModel, p);
+    console.log(
+      `Running Stage-2 knockout ${model} (${condition}) via agy (${agyModel})`,
     );
   } else if (via === "openai-direct") {
     const oaiModel = flags["litellm-model"];
