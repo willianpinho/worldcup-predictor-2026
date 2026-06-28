@@ -11,6 +11,8 @@
 //   const RAW_RUNS: unknown[] = [claudeEnriched];
 import claudeBaseline from "../../../docs/runs/knockout-real-claude-baseline-2026-06-28.json";
 import claudeEnriched from "../../../docs/runs/knockout-real-claude-enriched-2026-06-28.json";
+import geminiBaseline from "../../../docs/runs/knockout-real-gemini-baseline-2026-06-28.json";
+import geminiEnriched from "../../../docs/runs/knockout-real-gemini-enriched-2026-06-28.json";
 import openaiBaseline from "../../../docs/runs/knockout-real-openai-baseline-2026-06-28.json";
 import openaiEnriched from "../../../docs/runs/knockout-real-openai-enriched-2026-06-28.json";
 import type { Condition } from "../conditions";
@@ -20,11 +22,13 @@ import {
   type RealKnockoutRun,
 } from "./schema";
 
-// Raw static JSON imports — one bracket per (model, arm). The web arm needs a web-enabled
-// transport (added later); gemini needs the gemini-cli OAuth set up.
+// Raw static JSON imports — one bracket per (model, arm). All six API arms recorded; the
+// `web` (with-tools) arm needs a web-enabled transport and is added later.
 const RAW_RUNS: unknown[] = [
   claudeBaseline,
   claudeEnriched,
+  geminiBaseline,
+  geminiEnriched,
   openaiBaseline,
   openaiEnriched,
 ];
