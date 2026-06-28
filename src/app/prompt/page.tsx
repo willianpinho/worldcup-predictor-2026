@@ -18,7 +18,14 @@ const MODEL_LABEL: Record<string, string> = {
 const PROMPT_DOCS = [
   { file: "docs/PROMPT.md", label: "Group stage (web arm)" },
   { file: "docs/PROMPT-ENRICHED.md", label: "API arms (baseline + enriched)" },
-  { file: "docs/PROMPT-KNOCKOUT.md", label: "Knockout bracket" },
+  {
+    file: "docs/PROMPT-KNOCKOUT.md",
+    label: "Knockout bracket (Stage 1, self-conditioned)",
+  },
+  {
+    file: "docs/PROMPT-KNOCKOUT-REAL.md",
+    label: "Knockout II (Stage 2, ground-truth-conditioned)",
+  },
 ];
 
 export default function PromptPage() {
