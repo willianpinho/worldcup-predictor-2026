@@ -45,6 +45,53 @@ function loadPrompt(): string {
   return match[1].trim();
 }
 
+/**
+ * Direct OpenAI Chat Completions sender. OpenAI reasoning models (gpt-5.x) reject
+ * `max_tokens` and require `max_completion_tokens`, which the shared LiteLLM `chat()`
+ * helper does not send — so the direct OpenAI arm uses this minimal sender instead.
+ */
+async function chatOpenAiDirect(
+  baseUrl: string,
+  model: string,
+  apiKey: string,
+  maxTokens: number,
+  prompt: string,
+): Promise<{ content: string; totalTokens?: number; toolCalls: number }> {
+  const res = await fetch(`${baseUrl.replace(/\/$/, "")}/v1/chat/completions`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      messages: [{ role: "user", content: prompt }],
+      max_completion_tokens: maxTokens,
+    }),
+  });
+  const text = await res.text();
+  let data: {
+    choices?: Array<{ message?: { content?: string } }>;
+    usage?: { total_tokens?: number };
+    error?: { message?: string };
+  };
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error(
+      `OpenAI returned non-JSON (${res.status}): ${text.slice(0, 200)}`,
+    );
+  }
+  if (!res.ok)
+    throw new Error(
+      `OpenAI error ${res.status}: ${data.error?.message ?? text.slice(0, 200)}`,
+    );
+  const content = data.choices?.[0]?.message?.content;
+  if (typeof content !== "string" || content.length === 0)
+    throw new Error("OpenAI response had no message content");
+  return { content, totalTokens: data.usage?.total_tokens, toolCalls: 0 };
+}
+
 /** Enriched-only: a standardized ratings table for the 32 qualifiers (FIFA rank + Elo). */
 function renderQualifierRatings(datasetPath: string): string {
   const dataset = JSON.parse(
@@ -81,8 +128,13 @@ async function main(): Promise<void> {
     fail('--engine "<human label>" is required');
 
   const via = flags.via || "litellm";
-  if (via !== "litellm" && via !== "gemini-cli" && via !== "claude-cli")
-    fail("--via must be litellm, gemini-cli or claude-cli");
+  if (
+    via !== "litellm" &&
+    via !== "gemini-cli" &&
+    via !== "claude-cli" &&
+    via !== "openai-direct"
+  )
+    fail("--via must be litellm, gemini-cli, claude-cli or openai-direct");
 
   const condition = flags.condition || "enriched";
   if (!isCondition(condition))
@@ -124,6 +176,18 @@ async function main(): Promise<void> {
         : async (p) => chatViaClaudeCli(cliModel, p);
     console.log(
       `Running Stage-2 knockout ${model} (${condition}) via ${via} (${cliModel})`,
+    );
+  } else if (via === "openai-direct") {
+    const oaiModel = flags["litellm-model"];
+    if (!oaiModel || oaiModel === "true")
+      fail(
+        "--litellm-model <openai model id> is required with --via openai-direct",
+      );
+    const baseUrl = flags["base-url"] || "https://api.openai.com";
+    const apiKey = requireEnv("LITELLM_API_KEY");
+    send = (p) => chatOpenAiDirect(baseUrl, oaiModel, apiKey, maxTokens, p);
+    console.log(
+      `Running Stage-2 knockout ${model} (${condition}) via openai-direct (${oaiModel} @ ${baseUrl})`,
     );
   } else {
     const litellmModel = flags["litellm-model"];
