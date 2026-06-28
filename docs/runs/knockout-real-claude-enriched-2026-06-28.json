@@ -1,0 +1,353 @@
+{
+  "model": "claude",
+  "condition": "enriched",
+  "generatedAt": "2026-06-28T20:50:47.538Z",
+  "engine": "Claude Opus 4.8 (Anthropic API)",
+  "notes": "Predictions weigh group-stage form, squad strength, Elo and venue context. Host nations and high-Elo sides favored; upsets allowed where momentum supports.",
+  "rounds": {
+    "roundOf32": [
+      {
+        "slot": "R32-1",
+        "teamA": "South Africa",
+        "teamB": "Canada",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Canada",
+        "reasoning": "Canada's superior goal output and home-continent advantage edge out a stubborn but lower-rated South Africa."
+      },
+      {
+        "slot": "R32-2",
+        "teamA": "Germany",
+        "teamB": "Paraguay",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Germany",
+        "reasoning": "Germany topped a tough group with the best attack and should comfortably control a defensive Paraguay."
+      },
+      {
+        "slot": "R32-3",
+        "teamA": "Netherlands",
+        "teamB": "Morocco",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "extra-time",
+        "winner": "Netherlands",
+        "reasoning": "An evenly matched clash, but Dutch depth tips a tight game in extra time against a resilient Morocco."
+      },
+      {
+        "slot": "R32-4",
+        "teamA": "Brazil",
+        "teamB": "Japan",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Brazil",
+        "reasoning": "Brazil's attacking quality overcomes an organized Japan that impressed but lacks Brazil's individual firepower."
+      },
+      {
+        "slot": "R32-5",
+        "teamA": "France",
+        "teamB": "Sweden",
+        "scoreA": 3,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "France",
+        "reasoning": "France were dominant in the group and far outclass a workmanlike Sweden."
+      },
+      {
+        "slot": "R32-6",
+        "teamA": "Côte d'Ivoire",
+        "teamB": "Norway",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Norway",
+        "reasoning": "Norway's elite attacking talent and higher Elo give them the edge over a solid Ivory Coast."
+      },
+      {
+        "slot": "R32-7",
+        "teamA": "Mexico",
+        "teamB": "Ecuador",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 5,
+        "pensB": 4,
+        "winner": "Mexico",
+        "reasoning": "Host Mexico ride home support and altitude to edge a defensively strong Ecuador on penalties."
+      },
+      {
+        "slot": "R32-8",
+        "teamA": "England",
+        "teamB": "Congo DR",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "England",
+        "reasoning": "England's depth and quality are too much for an overachieving Congo DR."
+      },
+      {
+        "slot": "R32-9",
+        "teamA": "USA",
+        "teamB": "Bosnia and Herzegovina",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "USA",
+        "reasoning": "Host USA leverage home crowd and momentum to overcome a spirited Bosnia."
+      },
+      {
+        "slot": "R32-10",
+        "teamA": "Belgium",
+        "teamB": "Senegal",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 3,
+        "pensB": 4,
+        "winner": "Senegal",
+        "reasoning": "Senegal's athleticism and form upset an inconsistent Belgium in a shootout."
+      },
+      {
+        "slot": "R32-11",
+        "teamA": "Portugal",
+        "teamB": "Croatia",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "extra-time",
+        "winner": "Portugal",
+        "reasoning": "Portugal's attacking talent edges experienced Croatia in a high-quality extra-time battle."
+      },
+      {
+        "slot": "R32-12",
+        "teamA": "Spain",
+        "teamB": "Austria",
+        "scoreA": 3,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Spain",
+        "reasoning": "Tournament-favorite Spain's possession game overwhelms a disciplined but limited Austria."
+      },
+      {
+        "slot": "R32-13",
+        "teamA": "Switzerland",
+        "teamB": "Algeria",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Switzerland",
+        "reasoning": "Switzerland's group-winning form and organization see off a dangerous Algeria."
+      },
+      {
+        "slot": "R32-14",
+        "teamA": "Argentina",
+        "teamB": "Cabo Verde",
+        "scoreA": 3,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Argentina",
+        "reasoning": "Reigning champions Argentina are simply too strong for debutant Cabo Verde."
+      },
+      {
+        "slot": "R32-15",
+        "teamA": "Colombia",
+        "teamB": "Ghana",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Colombia",
+        "reasoning": "Colombia's quality and group form comfortably overcome a lower-ranked Ghana."
+      },
+      {
+        "slot": "R32-16",
+        "teamA": "Australia",
+        "teamB": "Egypt",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 4,
+        "pensB": 5,
+        "winner": "Egypt",
+        "reasoning": "Egypt's experience and Salah's threat edge a tight contest on penalties."
+      }
+    ],
+    "roundOf16": [
+      {
+        "slot": "R16-1",
+        "teamA": "Canada",
+        "teamB": "Germany",
+        "scoreA": 0,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Germany",
+        "reasoning": "Germany's pedigree and attacking class prove too much for host Canada."
+      },
+      {
+        "slot": "R16-2",
+        "teamA": "Netherlands",
+        "teamB": "Brazil",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Brazil",
+        "reasoning": "Brazil's flair and finishing edge a tense rematch of past classics."
+      },
+      {
+        "slot": "R16-3",
+        "teamA": "France",
+        "teamB": "Norway",
+        "scoreA": 3,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "France",
+        "reasoning": "France's depth and balance overpower a Norway side reliant on a few stars."
+      },
+      {
+        "slot": "R16-4",
+        "teamA": "Mexico",
+        "teamB": "England",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "England",
+        "reasoning": "England's squad quality overcomes host Mexico despite vocal home support."
+      },
+      {
+        "slot": "R16-5",
+        "teamA": "USA",
+        "teamB": "Senegal",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Senegal",
+        "reasoning": "Senegal's pace and power outmatch a USA side running out of momentum."
+      },
+      {
+        "slot": "R16-6",
+        "teamA": "Portugal",
+        "teamB": "Spain",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Spain",
+        "reasoning": "Spain's superior control of the Iberian derby sees them through."
+      },
+      {
+        "slot": "R16-7",
+        "teamA": "Switzerland",
+        "teamB": "Argentina",
+        "scoreA": 0,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Argentina",
+        "reasoning": "Argentina's champion quality is comfortably above an organized Switzerland."
+      },
+      {
+        "slot": "R16-8",
+        "teamA": "Colombia",
+        "teamB": "Egypt",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Colombia",
+        "reasoning": "Colombia's attacking depth edges a Salah-led Egypt."
+      }
+    ],
+    "quarterfinals": [
+      {
+        "slot": "QF-1",
+        "teamA": "Germany",
+        "teamB": "Brazil",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Brazil",
+        "reasoning": "Brazil avenge history with sharper attacking play against a strong Germany."
+      },
+      {
+        "slot": "QF-2",
+        "teamA": "France",
+        "teamB": "England",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "extra-time",
+        "winner": "France",
+        "reasoning": "France's individual brilliance edges England in a heavyweight extra-time clash."
+      },
+      {
+        "slot": "QF-3",
+        "teamA": "Senegal",
+        "teamB": "Spain",
+        "scoreA": 0,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Spain",
+        "reasoning": "Spain's possession dominance shuts down Senegal's transitions."
+      },
+      {
+        "slot": "QF-4",
+        "teamA": "Argentina",
+        "teamB": "Colombia",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Argentina",
+        "reasoning": "Argentina's experience and quality edge a competitive all-CONMEBOL tie."
+      }
+    ],
+    "semifinals": [
+      {
+        "slot": "SF-1",
+        "teamA": "Brazil",
+        "teamB": "France",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "France",
+        "reasoning": "France's defensive solidity and clinical finishing overcome Brazil."
+      },
+      {
+        "slot": "SF-2",
+        "teamA": "Spain",
+        "teamB": "Argentina",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 4,
+        "pensB": 5,
+        "winner": "Argentina",
+        "reasoning": "An epic between the top contenders is settled by Argentina's nerve from the spot."
+      }
+    ],
+    "thirdPlace": {
+      "slot": "TP",
+      "teamA": "Brazil",
+      "teamB": "Spain",
+      "scoreA": 2,
+      "scoreB": 2,
+      "decidedBy": "penalties",
+      "pensA": 5,
+      "pensB": 4,
+      "winner": "Brazil",
+      "reasoning": "Brazil edge a free-flowing third-place match on penalties."
+    },
+    "final": {
+      "slot": "F",
+      "teamA": "France",
+      "teamB": "Argentina",
+      "scoreA": 2,
+      "scoreB": 1,
+      "decidedBy": "extra-time",
+      "winner": "France",
+      "reasoning": "In a rematch of 2022, France's depth and balance finally overcome Argentina in extra time to claim the title."
+    }
+  },
+  "champion": "France",
+  "goldenBoot": {
+    "player": "Kylian Mbappé",
+    "team": "France",
+    "goals": 8
+  }
+}
