@@ -94,6 +94,64 @@ async function chatOpenAiDirect(
 }
 
 /**
+ * Anthropic Messages API with the `web_search` server tool — the clean `web` arm for Claude.
+ * Anthropic runs the searches server-side, so this is a single call (no client tool loop) with
+ * a FRESH context (unlike a Claude Code session). The final text blocks carry the bracket JSON.
+ */
+async function chatViaAnthropicWeb(
+  model: string,
+  apiKey: string,
+  maxTokens: number,
+  prompt: string,
+): Promise<{ content: string; totalTokens?: number; toolCalls: number }> {
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify({
+      model,
+      max_tokens: maxTokens,
+      tools: [{ type: "web_search_20250305", name: "web_search", max_uses: 6 }],
+      messages: [{ role: "user", content: prompt }],
+    }),
+  });
+  const raw = await res.text();
+  let data: {
+    content?: Array<{ type: string; text?: string }>;
+    usage?: { input_tokens?: number; output_tokens?: number };
+    error?: { message?: string };
+  };
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    throw new Error(
+      `Anthropic returned non-JSON (${res.status}): ${raw.slice(0, 200)}`,
+    );
+  }
+  if (!res.ok)
+    throw new Error(
+      `Anthropic error ${res.status}: ${data.error?.message ?? raw.slice(0, 200)}`,
+    );
+  const textOut = (data.content ?? [])
+    .filter((b) => b.type === "text" && typeof b.text === "string")
+    .map((b) => b.text)
+    .join("\n");
+  if (!textOut) throw new Error("Anthropic web response had no text content");
+  const start = textOut.indexOf("{");
+  const end = textOut.lastIndexOf("}");
+  const content =
+    start !== -1 && end > start ? textOut.slice(start, end + 1) : textOut;
+  const u = data.usage;
+  const totalTokens = u
+    ? (u.input_tokens ?? 0) + (u.output_tokens ?? 0)
+    : undefined;
+  return { content, totalTokens, toolCalls: 0 };
+}
+
+/**
  * Antigravity CLI (`agy`) transport — the replacement for the Gemini CLI. `agy -p` runs a
  * single non-interactive prompt and prints the plain-text response. No tools are requested by
  * a JSON-only generation prompt, so this is a clean no-tool call (we do not pass
@@ -224,11 +282,12 @@ async function main(): Promise<void> {
     via !== "gemini-cli" &&
     via !== "claude-cli" &&
     via !== "claude-web" &&
+    via !== "anthropic-web" &&
     via !== "openai-direct" &&
     via !== "agy"
   )
     fail(
-      "--via must be litellm, gemini-cli, claude-cli, claude-web, openai-direct or agy",
+      "--via must be litellm, gemini-cli, claude-cli, claude-web, anthropic-web, openai-direct or agy",
     );
 
   const condition = flags.condition || "enriched";
@@ -296,6 +355,17 @@ async function main(): Promise<void> {
     send = (p) => chatOpenAiDirect(baseUrl, oaiModel, apiKey, maxTokens, p);
     console.log(
       `Running Stage-2 knockout ${model} (${condition}) via openai-direct (${oaiModel} @ ${baseUrl})`,
+    );
+  } else if (via === "anthropic-web") {
+    const antModel = flags["litellm-model"];
+    if (!antModel || antModel === "true")
+      fail(
+        "--litellm-model <anthropic model id> is required with --via anthropic-web",
+      );
+    const apiKey = requireEnv("LITELLM_API_KEY");
+    send = (p) => chatViaAnthropicWeb(antModel, apiKey, maxTokens, p);
+    console.log(
+      `Running Stage-2 knockout ${model} (${condition}) via anthropic-web (${antModel})`,
     );
   } else {
     const litellmModel = flags["litellm-model"];
