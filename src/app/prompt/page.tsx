@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { CopyButton } from "@/components/CopyButton";
 import { CONDITION_META } from "@/lib/conditions";
 import { formatRunTimestamp } from "@/lib/format";
+import { loadStage2PromptText } from "@/lib/knockout-real/promptDoc";
+import {
+  importableJson as realImportableJson,
+  REAL_KNOCKOUT_RUNS,
+} from "@/lib/knockout-real/runs";
 import { PREDICTION_PROMPT } from "@/lib/prompt";
 import { importableJson, MODEL_RUNS } from "@/lib/runs";
 
@@ -29,6 +34,7 @@ const PROMPT_DOCS = [
 ];
 
 export default function PromptPage() {
+  const stage2Prompt = loadStage2PromptText();
   return (
     <div className="space-y-6">
       <div>
@@ -147,6 +153,88 @@ export default function PromptPage() {
           })}
         </section>
       )}
+
+      <section className="space-y-4 border-t border-border pt-6">
+        <div>
+          <h2 className="text-xl font-bold">Knockout II — Stage-2 prompt</h2>
+          <p className="mt-1 max-w-2xl text-sm text-muted">
+            The <strong>ground-truth-conditioned</strong> prompt, run after the
+            group stage. Every model gets the <strong>real</strong> FIFA group
+            results and the <strong>official Round-of-32 draw</strong>{" "}
+            (identical for all) and predicts only the knockout outcomes — so the
+            brackets are comparable tie by tie. See the{" "}
+            <a
+              href="/knockout-2"
+              className="underline decoration-border underline-offset-2 hover:text-accent"
+            >
+              Knockout II
+            </a>{" "}
+            page for the scored results.
+          </p>
+        </div>
+
+        {stage2Prompt && (
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="flex items-center justify-between border-b border-border px-4 py-2">
+              <span className="text-xs text-muted">
+                Stage-2 knockout prompt (ground-truth)
+              </span>
+              <CopyButton text={stage2Prompt} />
+            </div>
+            <pre className="overflow-x-auto whitespace-pre-wrap px-4 py-4 font-mono text-xs leading-relaxed text-foreground">
+              {stage2Prompt}
+            </pre>
+          </div>
+        )}
+
+        {REAL_KNOCKOUT_RUNS.length > 0 && (
+          <div className="space-y-4">
+            <p className="max-w-2xl text-sm text-muted">
+              The exact JSON each model returned for the Stage-2 prompt — the
+              recorded brackets shown on{" "}
+              <span className="font-mono">/knockout-2</span>.
+            </p>
+            {REAL_KNOCKOUT_RUNS.map((run) => {
+              const json = realImportableJson(run);
+              return (
+                <div
+                  key={`${run.model}-${run.condition}-${run.generatedAt}`}
+                  className="overflow-hidden rounded-2xl border border-border bg-surface"
+                >
+                  <div className="flex items-start justify-between gap-3 border-b border-border px-4 py-2">
+                    <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+                      <span className="rounded-md bg-surface-2 px-2 py-0.5 font-medium text-foreground">
+                        {MODEL_LABEL[run.model] ?? run.model}
+                      </span>
+                      <span className="rounded-md bg-accent/15 px-2 py-0.5 font-medium text-accent">
+                        {CONDITION_META[run.condition].label}
+                      </span>
+                      <span className="max-w-full truncate text-muted">
+                        {run.engine}
+                      </span>
+                      <span className="text-muted">
+                        {formatRunTimestamp(run.generatedAt)} · champion{" "}
+                        {run.champion}
+                      </span>
+                    </div>
+                    <span className="shrink-0">
+                      <CopyButton text={json} />
+                    </span>
+                  </div>
+                  <details>
+                    <summary className="cursor-pointer px-4 py-2 text-xs text-muted transition-colors hover:text-foreground">
+                      Show JSON output
+                    </summary>
+                    <pre className="overflow-x-auto whitespace-pre-wrap border-t border-border px-4 py-4 font-mono text-xs leading-relaxed text-foreground">
+                      {json}
+                    </pre>
+                  </details>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
     </div>
   );
 }
