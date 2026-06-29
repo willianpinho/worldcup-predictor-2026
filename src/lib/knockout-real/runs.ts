@@ -11,11 +11,13 @@
 //   const RAW_RUNS: unknown[] = [claudeEnriched];
 import claudeBaseline from "../../../docs/runs/knockout-real-claude-baseline-2026-06-28.json";
 import claudeEnriched from "../../../docs/runs/knockout-real-claude-enriched-2026-06-28.json";
+import claudeWeb from "../../../docs/runs/knockout-real-claude-web-2026-06-29.json";
 import geminiBaseline from "../../../docs/runs/knockout-real-gemini-baseline-2026-06-28.json";
 import geminiEnriched from "../../../docs/runs/knockout-real-gemini-enriched-2026-06-28.json";
 import geminiWeb from "../../../docs/runs/knockout-real-gemini-web-2026-06-29.json";
 import openaiBaseline from "../../../docs/runs/knockout-real-openai-baseline-2026-06-28.json";
 import openaiEnriched from "../../../docs/runs/knockout-real-openai-enriched-2026-06-28.json";
+import openaiWeb from "../../../docs/runs/knockout-real-openai-web-2026-06-29.json";
 import type { Condition } from "../conditions";
 import {
   parseRealKnockoutRun,
@@ -23,16 +25,18 @@ import {
   type RealKnockoutRun,
 } from "./schema";
 
-// Raw static JSON imports — one bracket per (model, arm). All six API arms recorded; the
-// `web` (with-tools) arm: gemini via agy + Claude via claude-web; OpenAI web pending.
+// Raw static JSON imports — one bracket per (model, arm). All 9 arms recorded: web (Gemini via
+// agy, Claude via Anthropic web_search, OpenAI via API) + baseline + enriched × 3 models.
 const RAW_RUNS: unknown[] = [
   claudeBaseline,
   claudeEnriched,
+  claudeWeb,
   geminiBaseline,
   geminiEnriched,
   geminiWeb,
   openaiBaseline,
   openaiEnriched,
+  openaiWeb,
 ];
 
 function load(raw: unknown): RealKnockoutRun {
