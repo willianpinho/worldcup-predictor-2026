@@ -1,0 +1,347 @@
+{
+  "model": "gemini",
+  "condition": "web",
+  "generatedAt": "2026-06-29T01:31:16.224Z",
+  "engine": "Gemini 3.1 Pro (Antigravity CLI, web)",
+  "notes": "2026 FIFA World Cup knockout stage complete predictions based on provided group stage performances and standard bracket progression.",
+  "rounds": {
+    "roundOf32": [
+      {
+        "slot": "R32-1",
+        "teamA": "South Africa",
+        "teamB": "Canada",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Canada",
+        "reasoning": "Canada's strong group stage momentum and clinical finishing overpower South Africa."
+      },
+      {
+        "slot": "R32-2",
+        "teamA": "Germany",
+        "teamB": "Paraguay",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Germany",
+        "reasoning": "Germany controls the midfield and comfortably breaks down a resilient Paraguayan defense."
+      },
+      {
+        "slot": "R32-3",
+        "teamA": "Netherlands",
+        "teamB": "Morocco",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Netherlands",
+        "reasoning": "The Netherlands narrowly edge out Morocco in a highly tactical and intense matchup."
+      },
+      {
+        "slot": "R32-4",
+        "teamA": "Brazil",
+        "teamB": "Japan",
+        "scoreA": 3,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Brazil",
+        "reasoning": "Brazil's attacking flair proves too much for Japan despite the latter's organized pressing."
+      },
+      {
+        "slot": "R32-5",
+        "teamA": "France",
+        "teamB": "Sweden",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "France",
+        "reasoning": "France dominates possession and easily bypasses Sweden with explosive pace on the wings."
+      },
+      {
+        "slot": "R32-6",
+        "teamA": "Côte d'Ivoire",
+        "teamB": "Norway",
+        "scoreA": 0,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Norway",
+        "reasoning": "Norway outlasts Côte d'Ivoire as they find a decisive breakthrough late in the second half."
+      },
+      {
+        "slot": "R32-7",
+        "teamA": "Mexico",
+        "teamB": "Ecuador",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Mexico",
+        "reasoning": "Mexico leverages massive home support to confidently dispatch Ecuador."
+      },
+      {
+        "slot": "R32-8",
+        "teamA": "England",
+        "teamB": "Congo DR",
+        "scoreA": 3,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "England",
+        "reasoning": "England's depth and attacking talent overwhelm Congo DR in a one-sided affair."
+      },
+      {
+        "slot": "R32-9",
+        "teamA": "USA",
+        "teamB": "Bosnia and Herzegovina",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "USA",
+        "reasoning": "The USA rides host nation momentum to a comfortable victory over Bosnia and Herzegovina."
+      },
+      {
+        "slot": "R32-10",
+        "teamA": "Belgium",
+        "teamB": "Senegal",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "extra-time",
+        "winner": "Belgium",
+        "reasoning": "Belgium relies on their experience to survive a thrilling extra-time battle against Senegal."
+      },
+      {
+        "slot": "R32-11",
+        "teamA": "Portugal",
+        "teamB": "Croatia",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 4,
+        "pensB": 3,
+        "winner": "Portugal",
+        "reasoning": "Portugal edges past Croatia in a tense penalty shootout after a hard-fought midfield stalemate."
+      },
+      {
+        "slot": "R32-12",
+        "teamA": "Spain",
+        "teamB": "Austria",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Spain",
+        "reasoning": "Spain's signature passing game dismantles Austria and highlights their credentials as title contenders."
+      },
+      {
+        "slot": "R32-13",
+        "teamA": "Switzerland",
+        "teamB": "Algeria",
+        "scoreA": 1,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Switzerland",
+        "reasoning": "Switzerland grinds out a disciplined and structured victory against a spirited Algerian side."
+      },
+      {
+        "slot": "R32-14",
+        "teamA": "Argentina",
+        "teamB": "Cabo Verde",
+        "scoreA": 3,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Argentina",
+        "reasoning": "Argentina comfortably brushes aside Cabo Verde with a vintage attacking performance."
+      },
+      {
+        "slot": "R32-15",
+        "teamA": "Colombia",
+        "teamB": "Ghana",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Colombia",
+        "reasoning": "Colombia's attacking dynamism shines through against a resilient Ghanaian squad."
+      },
+      {
+        "slot": "R32-16",
+        "teamA": "Australia",
+        "teamB": "Egypt",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Egypt",
+        "reasoning": "Egypt capitalizes on Australian defensive errors to advance in a closely contested match."
+      }
+    ],
+    "roundOf16": [
+      {
+        "slot": "R16-1",
+        "teamA": "Canada",
+        "teamB": "Germany",
+        "scoreA": 0,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Germany",
+        "reasoning": "Germany's tactical superiority suffocates Canada's counter-attacks in a professional display."
+      },
+      {
+        "slot": "R16-2",
+        "teamA": "Netherlands",
+        "teamB": "Brazil",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Brazil",
+        "reasoning": "Brazil overcomes the Netherlands in a classic encounter highlighted by individual brilliance."
+      },
+      {
+        "slot": "R16-3",
+        "teamA": "France",
+        "teamB": "Norway",
+        "scoreA": 3,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "France",
+        "reasoning": "France comprehensively defeats Norway, neutralizing their attacking threats with a rock-solid defense."
+      },
+      {
+        "slot": "R16-4",
+        "teamA": "Mexico",
+        "teamB": "England",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "extra-time",
+        "winner": "England",
+        "reasoning": "England survives a fierce challenge from Mexico in extra time, quieting the passionate home crowd."
+      },
+      {
+        "slot": "R16-5",
+        "teamA": "USA",
+        "teamB": "Belgium",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "USA",
+        "reasoning": "The USA produces a historic upset, utilizing their intense pressing and energy to frustrate Belgium."
+      },
+      {
+        "slot": "R16-6",
+        "teamA": "Portugal",
+        "teamB": "Spain",
+        "scoreA": 0,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "Spain",
+        "reasoning": "Spain edges their Iberian rivals Portugal with superior possession and a late decisive goal."
+      },
+      {
+        "slot": "R16-7",
+        "teamA": "Switzerland",
+        "teamB": "Argentina",
+        "scoreA": 0,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Argentina",
+        "reasoning": "Argentina's fluid attack unpicks Switzerland's stubborn low block for a comfortable win."
+      },
+      {
+        "slot": "R16-8",
+        "teamA": "Colombia",
+        "teamB": "Egypt",
+        "scoreA": 2,
+        "scoreB": 0,
+        "decidedBy": "regulation",
+        "winner": "Colombia",
+        "reasoning": "Colombia's creative midfield dominates Egypt to securely punch a ticket to the quarterfinals."
+      }
+    ],
+    "quarterfinals": [
+      {
+        "slot": "QF-1",
+        "teamA": "Germany",
+        "teamB": "Brazil",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "extra-time",
+        "winner": "Brazil",
+        "reasoning": "Brazil triumphs over Germany in a thrilling extra-time contest filled with dramatic momentum swings."
+      },
+      {
+        "slot": "QF-2",
+        "teamA": "France",
+        "teamB": "England",
+        "scoreA": 2,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "France",
+        "reasoning": "France outclasses England in a high-stakes European heavyweight clash with clinical counter-attacks."
+      },
+      {
+        "slot": "QF-3",
+        "teamA": "USA",
+        "teamB": "Spain",
+        "scoreA": 1,
+        "scoreB": 3,
+        "decidedBy": "regulation",
+        "winner": "Spain",
+        "reasoning": "Spain ends the USA's magical run with a masterclass in ball retention and precise finishing."
+      },
+      {
+        "slot": "QF-4",
+        "teamA": "Argentina",
+        "teamB": "Colombia",
+        "scoreA": 1,
+        "scoreB": 1,
+        "decidedBy": "penalties",
+        "pensA": 5,
+        "pensB": 4,
+        "winner": "Argentina",
+        "reasoning": "Argentina survives a grueling penalty shootout against Colombia after a fiery South American clash."
+      }
+    ],
+    "semifinals": [
+      {
+        "slot": "SF-1",
+        "teamA": "Brazil",
+        "teamB": "France",
+        "scoreA": 0,
+        "scoreB": 1,
+        "decidedBy": "regulation",
+        "winner": "France",
+        "reasoning": "France's resolute defense and lethal attacking transitions prove too much for Brazil in a narrow victory."
+      },
+      {
+        "slot": "SF-2",
+        "teamA": "Spain",
+        "teamB": "Argentina",
+        "scoreA": 1,
+        "scoreB": 2,
+        "decidedBy": "regulation",
+        "winner": "Argentina",
+        "reasoning": "Argentina secures their place in the final by outsmarting Spain in a tactical and intense battle."
+      }
+    ],
+    "thirdPlace": {
+      "slot": "TP",
+      "teamA": "Brazil",
+      "teamB": "Spain",
+      "scoreA": 3,
+      "scoreB": 2,
+      "decidedBy": "regulation",
+      "winner": "Brazil",
+      "reasoning": "Brazil claims third place in an entertaining, high-scoring affair against a slightly rotated Spanish side."
+    },
+    "final": {
+      "slot": "F",
+      "teamA": "France",
+      "teamB": "Argentina",
+      "scoreA": 2,
+      "scoreB": 1,
+      "decidedBy": "regulation",
+      "winner": "France",
+      "reasoning": "France clinches the World Cup, edging out Argentina in a tense and epic final decided by fine margins."
+    }
+  },
+  "champion": "France",
+  "goldenBoot": {
+    "player": "Kylian Mbappé",
+    "team": "France",
+    "goals": 7
+  }
+}

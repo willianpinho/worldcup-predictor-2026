@@ -102,12 +102,17 @@ async function chatOpenAiDirect(
 function chatViaAgy(
   model: string,
   prompt: string,
+  allowTools = false,
 ): { content: string; totalTokens?: number; toolCalls: number } {
-  const res = spawnSync("agy", ["-p", prompt, "--model", model], {
+  // The `web` arm WANTS web access: --dangerously-skip-permissions auto-approves the
+  // browse/search tools. Other arms stay tool-free (no flag → tool requests are denied).
+  const args = ["-p", prompt, "--model", model];
+  if (allowTools) args.push("--dangerously-skip-permissions");
+  const res = spawnSync("agy", args, {
     encoding: "utf8",
     windowsHide: true,
     maxBuffer: 64 * 1024 * 1024,
-    timeout: 12 * 60 * 1000,
+    timeout: 15 * 60 * 1000,
   });
   if (res.error) throw new Error(`agy failed to start: ${res.error.message}`);
   if (res.status !== 0)
@@ -116,6 +121,65 @@ function chatViaAgy(
     );
   const content = (res.stdout || "").trim();
   if (!content) throw new Error("agy returned empty output");
+  return { content, toolCalls: 0 };
+}
+
+/**
+ * Claude Code CLI with WEB access — the `web` arm for Claude. Unlike the no-tool transport
+ * (claudeCli.ts, --disallowedTools "*"), this allows only WebSearch/WebFetch so the model can
+ * confirm form/injuries/odds, then returns JSON. Tool use is expected here (the web arm), so a
+ * multi-turn reply is fine.
+ */
+function chatViaClaudeWeb(
+  cliModel: string,
+  prompt: string,
+): { content: string; totalTokens?: number; toolCalls: number } {
+  const res = spawnSync(
+    "claude",
+    [
+      "-p",
+      prompt,
+      "--model",
+      cliModel,
+      "--allowedTools",
+      "WebSearch",
+      "WebFetch",
+      "--output-format",
+      "json",
+    ],
+    {
+      encoding: "utf8",
+      windowsHide: true,
+      maxBuffer: 64 * 1024 * 1024,
+      timeout: 15 * 60 * 1000,
+      env: { ...process.env, STOP_COMPLETENESS_DISABLED: "1" },
+    },
+  );
+  if (res.error)
+    throw new Error(`claude (web) failed to start: ${res.error.message}`);
+  if (res.status !== 0)
+    throw new Error(
+      `claude (web) exited ${res.status}: ${(res.stderr || "").slice(-300)}`,
+    );
+  let parsed: { result?: string; is_error?: boolean; errors?: unknown[] };
+  try {
+    parsed = JSON.parse(res.stdout);
+  } catch {
+    throw new Error(
+      `claude (web) returned non-JSON: ${res.stdout.slice(0, 200)}`,
+    );
+  }
+  if (parsed.is_error || typeof parsed.result !== "string" || !parsed.result)
+    throw new Error(
+      `claude (web) errored: ${JSON.stringify(parsed.errors ?? "no result").slice(0, 200)}`,
+    );
+  // In agent (web) mode Claude often wraps the JSON in prose ("That captures … {…}").
+  // Extract the outermost {...} object so the bracket parses; fall back to the raw text.
+  const text = parsed.result;
+  const start = text.indexOf("{");
+  const end = text.lastIndexOf("}");
+  const content =
+    start !== -1 && end > start ? text.slice(start, end + 1) : text;
   return { content, toolCalls: 0 };
 }
 
@@ -159,10 +223,13 @@ async function main(): Promise<void> {
     via !== "litellm" &&
     via !== "gemini-cli" &&
     via !== "claude-cli" &&
+    via !== "claude-web" &&
     via !== "openai-direct" &&
     via !== "agy"
   )
-    fail("--via must be litellm, gemini-cli, claude-cli, openai-direct or agy");
+    fail(
+      "--via must be litellm, gemini-cli, claude-cli, claude-web, openai-direct or agy",
+    );
 
   const condition = flags.condition || "enriched";
   if (!isCondition(condition))
@@ -194,14 +261,16 @@ async function main(): Promise<void> {
   let send: (
     p: string,
   ) => Promise<{ content: string; totalTokens?: number; toolCalls?: number }>;
-  if (via === "gemini-cli" || via === "claude-cli") {
+  if (via === "gemini-cli" || via === "claude-cli" || via === "claude-web") {
     const cliModel = flags["cli-model"];
     if (!cliModel || cliModel === "true")
       fail(`--cli-model <model id> is required with --via ${via}`);
     send =
       via === "gemini-cli"
         ? async (p) => chatViaGeminiCli(cliModel, p)
-        : async (p) => chatViaClaudeCli(cliModel, p);
+        : via === "claude-web"
+          ? async (p) => chatViaClaudeWeb(cliModel, p)
+          : async (p) => chatViaClaudeCli(cliModel, p);
     console.log(
       `Running Stage-2 knockout ${model} (${condition}) via ${via} (${cliModel})`,
     );
@@ -211,7 +280,8 @@ async function main(): Promise<void> {
       fail(
         '--cli-model "<agy model, e.g. Gemini 3.1 Pro (High)>" is required with --via agy',
       );
-    send = async (p) => chatViaAgy(agyModel, p);
+    // `web` arm → let agy browse; other arms stay tool-free.
+    send = async (p) => chatViaAgy(agyModel, p, condition === "web");
     console.log(
       `Running Stage-2 knockout ${model} (${condition}) via agy (${agyModel})`,
     );
